@@ -1,0 +1,3163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Logistics & Accessibility Intelligence Platform - NER</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F0F2F5;
+            color: #1a1a1a;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 24px 32px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #003366;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-text h1 {
+            color: #003366;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header-text .subtitle {
+            color: #666;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #003366, #004080);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 16px 32px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-items {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-items li a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-items li a:hover {
+            color: #003366;
+        }
+
+        .nav-items li a.active {
+            color: #003366;
+            font-weight: 600;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .main-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Cards and Panels */
+        .panel {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .panel h2 {
+            color: #003366;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Map Container */
+        .map-container {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        #map {
+            height: 550px;
+            border-radius: 6px;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* Status Indicators */
+        .status-indicators {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .status-card {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .status-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .status-clear {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        .status-at-risk {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        }
+
+        .status-blocked {
+            background: linear-gradient(135deg, #1e40af, #1e3a8a);
+        }
+
+        .status-number {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .status-label {
+            font-size: 13px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        /* Weather Panel */
+        .weather-info {
+            background: linear-gradient(135deg, #003366, #004080);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .weather-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .weather-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .weather-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .weather-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .weather-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Alert Box */
+        .alert-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .alert-box.active {
+            display: block;
+        }
+
+        .alert-box.high-risk {
+            background: #fef2f2;
+            border-left-color: #dc2626;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .alert-box.high-risk .alert-title {
+            color: #991b1b;
+        }
+
+        .alert-message {
+            color: #92400e;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .alert-box.high-risk .alert-message {
+            color: #991b1b;
+        }
+
+        /* Route List */
+        .route-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .route-item {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .route-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .route-item:last-child {
+            border-bottom: none;
+        }
+
+        .route-info {
+            flex: 1;
+        }
+
+        .route-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .route-risk {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .route-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .route-status.clear {
+            background: #10b981;
+        }
+
+        .route-status.at-risk {
+            background: #f59e0b;
+        }
+
+        .route-status.blocked {
+            background: #ef4444;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #003366;
+            box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #003366, #004080);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 51, 102, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* AI Route Suggestions */
+        .ai-route-card {
+            background: linear-gradient(135deg, #f8fafc, #e8f4f8);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #003366;
+            margin-bottom: 16px;
+        }
+
+        .ai-route-card h4 {
+            color: #003366;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-badge {
+            background: linear-gradient(135deg, #003366, #004080);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .route-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .route-detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .route-detail-label {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .route-detail-value {
+            font-size: 14px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .route-description {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .delay-warning {
+            background: #fef2f2;
+            border-left: 3px solid #dc2626;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #991b1b;
+        }
+
+        .delay-warning.moderate {
+            background: #fffbeb;
+            border-left-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .delay-warning.low {
+            background: #f0fdf4;
+            border-left-color: #10b981;
+            color: #166534;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+            font-size: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .legend-color.green {
+            background: #10b981;
+        }
+
+        .legend-color.yellow {
+            background: #f59e0b;
+        }
+
+        .legend-color.red {
+            background: #ef4444;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 32px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #map {
+                height: 400px;
+            }
+
+            .nav-items {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Animation */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .timestamp {
+            font-size: 11px;
+            color: #999;
+            margin-left: auto;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: #1a1a2e;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode header {
+            background: #16213e;
+            border-left: 4px solid #4a90e2;
+        }
+
+        body.dark-mode .header-text h1 {
+            color: #ffffff;
+        }
+
+        body.dark-mode .header-text .subtitle {
+            color: #a0a0a0;
+        }
+
+        body.dark-mode nav {
+            background: #16213e;
+        }
+
+        body.dark-mode .nav-items li a {
+            color: #a0a0a0;
+        }
+
+        body.dark-mode .nav-items li a:hover {
+            color: #ffffff;
+        }
+
+        body.dark-mode .nav-items li a.active {
+            color: #ffffff;
+        }
+
+        body.dark-mode .panel,
+        body.dark-mode .map-container {
+            background: #16213e;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .panel h2 {
+            color: #ffffff;
+            border-bottom: 2px solid #2a3a5e;
+        }
+
+        body.dark-mode #map {
+            border: 1px solid #2a3a5e;
+        }
+
+        body.dark-mode .status-card {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .weather-info {
+            background: linear-gradient(135deg, #1e3a5f, #2a4a7f);
+        }
+
+        body.dark-mode .alert-box {
+            background: #2a2a1e;
+            border-left: 4px solid #f59e0b;
+        }
+
+        body.dark-mode .alert-box.high-risk {
+            background: #2a1e1e;
+            border-left-color: #dc2626;
+        }
+
+        body.dark-mode .alert-title {
+            color: #e0a050;
+        }
+
+        body.dark-mode .alert-box.high-risk .alert-title {
+            color: #e05050;
+        }
+
+        body.dark-mode .alert-message {
+            color: #e0a050;
+        }
+
+        body.dark-mode .alert-box.high-risk .alert-message {
+            color: #e05050;
+        }
+
+        body.dark-mode .route-item {
+            border-bottom: 1px solid #2a3a5e;
+        }
+
+        body.dark-mode .route-item:hover {
+            background-color: #1e2a4a;
+        }
+
+        body.dark-mode .route-name {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .route-risk {
+            color: #a0a0a0;
+        }
+
+        body.dark-mode .form-group label {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select,
+        body.dark-mode .form-group textarea {
+            background: #1a1a2e;
+            border: 1px solid #2a3a5e;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .form-group input:focus,
+        body.dark-mode .form-group select:focus,
+        body.dark-mode .form-group textarea:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        body.dark-mode .ai-route-card {
+            background: linear-gradient(135deg, #1e2a4a, #1a2a3a);
+            border-left: 4px solid #ffffff;
+        }
+
+        body.dark-mode .ai-route-card h4 {
+            color: #ffffff;
+        }
+
+        body.dark-mode .route-detail-label {
+            color: #a0a0a0;
+        }
+
+        body.dark-mode .route-detail-value {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .route-description {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .delay-warning {
+            background: #2a1e1e;
+            border-left-color: #dc2626;
+            color: #e05050;
+        }
+
+        body.dark-mode .delay-warning.moderate {
+            background: #2a2a1e;
+            border-left-color: #f59e0b;
+            color: #e0a050;
+        }
+
+        body.dark-mode .delay-warning.low {
+            background: #1e2a1e;
+            border-left-color: #10b981;
+            color: #50e050;
+        }
+
+        body.dark-mode .logo-icon {
+            background: linear-gradient(135deg, #1e3a5f, #2a4a7f);
+        }
+
+        body.dark-mode .header-logo div:first-child {
+            color: #ffffff;
+        }
+
+        body.dark-mode .header-logo div:last-child {
+            color: #a0a0a0;
+        }
+
+        body.dark-mode .map-container h2[style*="color: #003366"] {
+            color: #ffffff !important;
+        }
+
+        body.dark-mode [style*="color: #003366"] {
+            color: #ffffff !important;
+        }
+
+        body.dark-mode [style*="color: #666"] {
+            color: #e0e0e0 !important;
+        }
+
+        body.dark-mode .legend-item span {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode ::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+
+        body.dark-mode ::-webkit-scrollbar-thumb {
+            background: #3a3a5e;
+        }
+
+        body.dark-mode ::-webkit-scrollbar-thumb:hover {
+            background: #4a4a7e;
+        }
+
+        body.dark-mode .loading {
+            color: #a0a0a0;
+        }
+
+        /* Navigation Dropdown */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 180px;
+            overflow: hidden;
+            display: none;
+            z-index: 1000;
+        }
+
+        .nav-dropdown-menu.active {
+            display: block;
+            animation: fadeIn 0.2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body.dark-mode .nav-dropdown-menu {
+            background: #16213e;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background-color 0.2s;
+            color: #1a1a1a;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-dropdown-item:hover {
+            background-color: #f0f2f5;
+        }
+
+        body.dark-mode .nav-dropdown-item {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .nav-dropdown-item:hover {
+            background-color: #1e2a4a;
+        }
+
+        .dropdown-icon {
+            font-size: 18px;
+        }
+
+        /* Route Finder Form under map */
+        .route-finder-panel {
+            margin-top: 24px;
+        }
+
+        .route-finder-form {
+            margin-bottom: 20px;
+        }
+
+        .route-finder-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+        }
+
+        body.dark-mode .btn-secondary {
+            background: linear-gradient(135deg, #4b5563, #374151);
+        }
+
+        .route-results {
+            background: linear-gradient(135deg, #f8fafc, #e8f4f8);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #003366;
+            margin-top: 16px;
+        }
+
+        body.dark-mode .route-results {
+            background: linear-gradient(135deg, #1e2a4a, #1a2a3a);
+            border-left-color: #4a90e2;
+        }
+
+        .route-results h3 {
+            color: #003366;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        body.dark-mode .route-results h3 {
+            color: #ffffff;
+        }
+
+        .route-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        body.dark-mode .detail-label {
+            color: #a0a0a0;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        body.dark-mode .detail-value {
+            color: #e0e0e0;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Reliability Table */
+        .reliability-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .reliability-table th {
+            background: linear-gradient(135deg, #003366, #004080);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .reliability-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+        }
+
+        body.dark-mode .reliability-table td {
+            border-bottom-color: #2a3a5e;
+            color: #e0e0e0;
+        }
+
+        .reliability-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .reliability-high {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .reliability-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .reliability-low {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        body.dark-mode .reliability-high {
+            background: #064e3b;
+            color: #d1fae5;
+        }
+
+        body.dark-mode .reliability-medium {
+            background: #78350f;
+            color: #fef3c7;
+        }
+
+        body.dark-mode .reliability-low {
+            background: #7f1d1d;
+            color: #fee2e2;
+        }
+
+        .trend-up {
+            color: #10b981;
+        }
+
+        .trend-down {
+            color: #ef4444;
+        }
+
+        .trend-stable {
+            color: #6b7280;
+        }
+
+        /* Disruption Leaderboard */
+        .disruption-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.2s;
+        }
+
+        body.dark-mode .disruption-item {
+            border-bottom-color: #2a3a5e;
+        }
+
+        .disruption-item:hover {
+            background-color: #f8fafc;
+        }
+
+        body.dark-mode .disruption-item:hover {
+            background-color: #1e2a4a;
+        }
+
+        .disruption-rank {
+            font-size: 24px;
+            font-weight: 700;
+            color: #003366;
+            width: 40px;
+            text-align: center;
+        }
+
+        body.dark-mode .disruption-rank {
+            color: #4a90e2;
+        }
+
+        .disruption-info {
+            flex: 1;
+            margin-left: 16px;
+        }
+
+        .disruption-route {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        body.dark-mode .disruption-route {
+            color: #e0e0e0;
+        }
+
+        .disruption-count {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ef4444;
+        }
+
+        /* Chart Controls */
+        .chart-controls {
+            margin-bottom: 16px;
+        }
+
+        .form-control {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            min-width: 250px;
+        }
+
+        body.dark-mode .form-control {
+            background: #1a1a2e;
+            border-color: #2a3a5e;
+            color: #e0e0e0;
+        }
+
+        .chart-container {
+            height: 400px;
+            position: relative;
+        }
+
+        /* Weather Metrics */
+        .weather-metric {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .metric-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #003366;
+            margin-bottom: 8px;
+        }
+
+        body.dark-mode .metric-value {
+            color: #4a90e2;
+        }
+
+        .metric-value.large {
+            font-size: 48px;
+        }
+
+        .metric-relevance {
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+            line-height: 1.5;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            width: 100%;
+        }
+
+        body.dark-mode .metric-relevance {
+            background: #1e2a4a;
+            color: #a0a0a0;
+        }
+
+        /* Wind Arrow */
+        .wind-arrow {
+            font-size: 48px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Precipitation Status */
+        .precipitation-status {
+            font-size: 18px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 12px;
+        }
+
+        .precipitation-status.green {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .precipitation-status.yellow {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .precipitation-status.red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        body.dark-mode .precipitation-status.green {
+            background: #064e3b;
+            color: #d1fae5;
+        }
+
+        body.dark-mode .precipitation-status.yellow {
+            background: #78350f;
+            color: #fef3c7;
+        }
+
+        body.dark-mode .precipitation-status.red {
+            background: #7f1d1d;
+            color: #fee2e2;
+        }
+
+        /* Pressure Trend */
+        .pressure-trend {
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        .pressure-warning {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        body.dark-mode .pressure-warning {
+            background: #7f1d1d;
+            color: #fee2e2;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* District Weather Grid */
+        .district-weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .district-weather-card {
+            background: linear-gradient(135deg, #f8fafc, #e8f4f8);
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #003366;
+        }
+
+        body.dark-mode .district-weather-card {
+            background: linear-gradient(135deg, #1e2a4a, #1a2a3a);
+            border-left-color: #4a90e2;
+        }
+
+        .district-weather-card.high-risk {
+            border-left-color: #ef4444;
+        }
+
+        .district-weather-card.medium-risk {
+            border-left-color: #f59e0b;
+        }
+
+        .district-weather-card.low-risk {
+            border-left-color: #10b981;
+        }
+
+        .district-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #003366;
+            margin-bottom: 8px;
+        }
+
+        body.dark-mode .district-name {
+            color: #4a90e2;
+        }
+
+        .district-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .district-metric {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .district-metric-label {
+            color: #666;
+            font-size: 11px;
+        }
+
+        body.dark-mode .district-metric-label {
+            color: #a0a0a0;
+        }
+
+        .district-metric-value {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode .district-metric-value {
+            color: #e0e0e0;
+        }
+
+        /* Incident Reports */
+        .incident-reports-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .incident-card {
+            background: #f8fafc;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        body.dark-mode .incident-card {
+            background: #1e2a4a;
+            border-color: #2a3a5e;
+        }
+
+        .incident-card:hover {
+            background: #e8f4f8;
+            transform: translateX(4px);
+        }
+
+        body.dark-mode .incident-card:hover {
+            background: #2a3a5e;
+        }
+
+        .incident-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .incident-type {
+            font-weight: 600;
+            color: #003366;
+            font-size: 14px;
+        }
+
+        body.dark-mode .incident-type {
+            color: #4a90e2;
+        }
+
+        .incident-date {
+            font-size: 12px;
+            color: #666;
+        }
+
+        body.dark-mode .incident-date {
+            color: #a0a0a0;
+        }
+
+        .incident-location {
+            font-size: 13px;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        body.dark-mode .incident-location {
+            color: #e0e0e0;
+        }
+
+        .incident-severity {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .severity-low {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .severity-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .severity-high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .severity-critical {
+            background: #7f1d1d;
+            color: #fee2e2;
+        }
+
+        body.dark-mode .severity-low {
+            background: #064e3b;
+            color: #d1fae5;
+        }
+
+        body.dark-mode .severity-medium {
+            background: #78350f;
+            color: #fef3c7;
+        }
+
+        body.dark-mode .severity-high {
+            background: #7f1d1d;
+            color: #fee2e2;
+        }
+
+        /* Incident Detail View */
+        .incident-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .detail-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        body.dark-mode .detail-label {
+            color: #a0a0a0;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode .detail-value {
+            color: #e0e0e0;
+        }
+
+        .no-reports {
+            text-align: center;
+            padding: 48px;
+            color: #666;
+        }
+
+        body.dark-mode .no-reports {
+            color: #a0a0a0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>Smart Logistics & Accessibility Intelligence Platform</h1>
+                    <p class="subtitle">North East India Road Monitoring & Risk Assessment System</p>
+                </div>
+                <div class="header-logo">
+                    <div class="logo-icon">SL</div>
+                    <div>
+                        <div style="font-weight: 600; color: #003366; font-size: 14px;">NER Logistics</div>
+                        <div style="font-size: 11px; color: #666;">AI-Powered Intelligence</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav>
+            <ul class="nav-items">
+                <li><a href="#" class="active" data-tab="dashboard">Dashboard</a></li>
+                <li><a href="#" data-tab="route-analytics">Route Analytics</a></li>
+                <li><a href="#" data-tab="weather-monitoring">Weather Monitoring</a></li>
+                <li><a href="#" data-tab="incident-reports">Incident Reports</a></li>
+                <li><a href="#">AI Predictions</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" id="settings-nav-btn">Settings ▼</a>
+                    <div class="nav-dropdown-menu" id="nav-settings-dropdown">
+                        <div class="nav-dropdown-item" id="nav-light-mode-btn">
+                            <span class="dropdown-icon">☀️</span>
+                            <span>Light Mode</span>
+                        </div>
+                        <div class="nav-dropdown-item" id="nav-dark-mode-btn">
+                            <span class="dropdown-icon">🌙</span>
+                            <span>Dark Mode</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard-tab" class="tab-content active">
+        <div class="dashboard-grid">
+            <div class="main-column">
+                <div class="map-container">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h2 style="color: #003366; font-size: 18px; font-weight: 600; margin: 0;">Interactive Route Map</h2>
+                        <div style="display: flex; align-items: center; font-size: 12px; color: #666;">
+                            <span class="live-indicator"></span>
+                            <span>Live Updates</span>
+                            <span class="timestamp" id="last-update">Last update: Just now</span>
+                        </div>
+                    </div>
+                    <div id="map"></div>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color green"></div>
+                            <span>Clear Routes</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color yellow"></div>
+                            <span>At Risk</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color red"></div>
+                            <span>Blocked</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Optimal Route Finder under map -->
+                <div class="panel route-finder-panel">
+                    <h2>🧭 Optimal Route Finder (Dijkstra's Algorithm)</h2>
+                    <div class="route-finder-form">
+                        <div class="form-group">
+                            <label for="start-district">Start District</label>
+                            <select id="start-district" required>
+                                <option value="">Select start district</option>
+                                <option value="guwahati">Guwahati</option>
+                                <option value="shillong">Shillong</option>
+                                <option value="imphal">Imphal</option>
+                                <option value="kohima">Kohima</option>
+                                <option value="aizawl">Aizawl</option>
+                                <option value="agartala">Agartala</option>
+                                <option value="itanagar">Itanagar</option>
+                                <option value="gangtok">Gangtok</option>
+                                <option value="dibrugarh">Dibrugarh</option>
+                                <option value="silchar">Silchar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="end-district">End District</label>
+                            <select id="end-district" required>
+                                <option value="">Select end district</option>
+                                <option value="guwahati">Guwahati</option>
+                                <option value="shillong">Shillong</option>
+                                <option value="imphal">Imphal</option>
+                                <option value="kohima">Kohima</option>
+                                <option value="aizawl">Aizawl</option>
+                                <option value="agartala">Agartala</option>
+                                <option value="itanagar">Itanagar</option>
+                                <option value="gangtok">Gangtok</option>
+                                <option value="dibrugarh">Dibrugarh</option>
+                                <option value="silchar">Silchar</option>
+                            </select>
+                        </div>
+                        <div class="route-finder-buttons">
+                            <button type="button" id="find-optimal-route" class="btn">🔍 Find Optimal Route</button>
+                            <button type="button" id="simulate-disruption" class="btn btn-secondary">⚡ Simulate Disruption</button>
+                        </div>
+                    </div>
+                    <div class="route-results" id="route-results" style="display: none;">
+                        <h3>📊 Optimal Path Results</h3>
+                        <div class="route-details-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Total Distance:</span>
+                                <span class="detail-value" id="optimal-distance">-- km</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Total Risk Score:</span>
+                                <span class="detail-value" id="optimal-risk">--</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Estimated Time:</span>
+                                <span class="detail-value" id="optimal-time">--</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Path:</span>
+                                <span class="detail-value" id="optimal-path">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="panel">
+                    <h2>📊 Route Status Overview</h2>
+                    <div class="status-indicators">
+                        <div class="status-card status-clear">
+                            <div class="status-number" id="clear-count">0</div>
+                            <div class="status-label">Clear Routes</div>
+                        </div>
+                        <div class="status-card status-at-risk">
+                            <div class="status-number" id="at-risk-count">0</div>
+                            <div class="status-label">At Risk</div>
+                        </div>
+                        <div class="status-card status-blocked">
+                            <div class="status-number" id="blocked-count">0</div>
+                            <div class="status-label">Blocked</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>🌤️ Weather Conditions</h2>
+                    <div class="weather-info">
+                        <h3>📍 NER Region Weather</h3>
+                        <div class="weather-details">
+                            <div class="weather-item">
+                                <span class="weather-label">Temperature</span>
+                                <span class="weather-value"><span id="temperature">--</span>°C</span>
+                            </div>
+                            <div class="weather-item">
+                                <span class="weather-label">Humidity</span>
+                                <span class="weather-value"><span id="humidity">--</span>%</span>
+                            </div>
+                            <div class="weather-item">
+                                <span class="weather-label">Wind Speed</span>
+                                <span class="weather-value"><span id="wind">--</span> km/h</span>
+                            </div>
+                            <div class="weather-item">
+                                <span class="weather-label">Rainfall</span>
+                                <span class="weather-value"><span id="rainfall">--</span> mm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>🚨 Alerts & Notifications</h2>
+                    <div class="alert-box" id="alert-box">
+                        <div class="alert-title" id="alert-title">⚠️ Attention Required</div>
+                        <div class="alert-message" id="alert-message">No active alerts</div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>🛣️ Route Status List</h2>
+                    <div class="route-list" id="route-list">
+                        <div class="loading">Loading routes...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Route Analytics Tab -->
+        <div id="route-analytics-tab" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="panel">
+                    <h2>📊 Route Reliability Ranking</h2>
+                    <p class="subtitle">Historical uptime percentage for the last 30 days</p>
+                    <div class="reliability-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Route</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Reliability</th>
+                                    <th>Trend</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reliability-table-body">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>⚠️ Most Disrupted Routes</h2>
+                    <p class="subtitle">Routes with most incidents in last 30 days</p>
+                    <div class="disruption-leaderboard" id="disruption-leaderboard">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>📈 Risk Trend Analysis</h2>
+                <p class="subtitle">Risk score trends over the last 30 days</p>
+                <div class="chart-controls">
+                    <select id="route-select" class="form-control">
+                        <option value="">Select a route to view trend</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="risk-trend-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weather Monitoring Tab -->
+        <div id="weather-monitoring-tab" class="tab-content">
+            <div class="panel" style="margin-bottom: 24px;">
+                <h2>📍 Guwahati - Central Monitoring Station</h2>
+                <p class="subtitle">Primary weather reference point for NER logistics operations</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="panel">
+                    <h2>🌡️ Temperature</h2>
+                    <p class="subtitle">Road surface risk indicator</p>
+                    <div class="weather-metric">
+                        <div class="metric-icon" id="temp-icon">☀️</div>
+                        <div class="metric-value" id="temp-value">--°C</div>
+                        <div class="metric-relevance">
+                            <strong>Route Risk:</strong> Extreme heat can soften bitumen surfaces on low-altitude routes; sudden drops after rainfall cause cracking in hilly terrain.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>💧 Humidity</h2>
+                    <p class="subtitle">Pre-monsoon storm indicator</p>
+                    <div class="weather-metric">
+                        <div class="metric-icon">💧</div>
+                        <div class="metric-value" id="humidity-value">--%</div>
+                        <div class="metric-relevance">
+                            <strong>Route Risk:</strong> High humidity + rising temperature signals pre-monsoon storm buildup. Early warning before rainfall/pressure changes.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>💨 Wind Speed & Direction</h2>
+                    <p class="subtitle">Storm movement tracker</p>
+                    <div class="weather-metric">
+                        <div class="metric-icon">
+                            <div class="wind-arrow" id="wind-arrow">↑</div>
+                        </div>
+                        <div class="metric-value" id="wind-value">-- km/h</div>
+                        <div class="metric-relevance">
+                            <strong>Route Risk:</strong> High winds can bring down trees/debris on narrow hill roads. Direction shows storm movement toward districts.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="panel precipitation-panel">
+                    <h2>🌧️ Precipitation</h2>
+                    <p class="subtitle">#1 Risk Driver - Landslide & Flood Risk</p>
+                    <div class="weather-metric precipitation-metric">
+                        <div class="metric-icon">🌧️</div>
+                        <div class="metric-value large" id="precipitation-value">-- mm/hr</div>
+                        <div class="precipitation-status" id="precipitation-status">--</div>
+                        <div class="metric-relevance">
+                            <strong>Route Risk:</strong> Directly correlates with landslide and flood risk in NER terrain. Highest weight in risk scoring.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel pressure-panel">
+                    <h2>📊 Barometric Pressure</h2>
+                    <p class="subtitle">Predictive Storm Indicator</p>
+                    <div class="weather-metric">
+                        <div class="metric-icon">
+                            <div class="pressure-trend" id="pressure-trend">→</div>
+                        </div>
+                        <div class="metric-value" id="pressure-value">-- hPa</div>
+                        <div class="pressure-warning" id="pressure-warning" style="display: none;">
+                            ⚠️ Storm approaching - Pressure dropping rapidly
+                        </div>
+                        <div class="metric-relevance">
+                            <strong>Route Risk:</strong> Rapidly falling pressure predicts approaching storms before rainfall. Truly predictive, not reactive.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>🗺️ District Weather Map</h2>
+                <p class="subtitle">Real-time weather conditions across all NER districts</p>
+                <div class="district-weather-grid" id="district-weather-grid">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Incident Reports Tab -->
+        <div id="incident-reports-tab" class="tab-content">
+            <div class="panel">
+                <h2>📋 Incident Reports</h2>
+                <p class="subtitle">View all submitted field incident reports</p>
+                <div id="incident-reports-list">
+                    <div class="loading">Loading incident reports...</div>
+                </div>
+            </div>
+
+            <div id="incident-detail-view" class="panel" style="display: none;">
+                <button id="back-to-list" class="btn" style="margin-bottom: 16px;">← Back to List</button>
+                <div id="incident-detail-content">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="panel">
+                <h2>📝 Field Incident Report</h2>
+                <form id="incident-form">
+                    <div class="form-group">
+                        <label for="incident-type">Incident Type</label>
+                        <select id="incident-type" required>
+                            <option value="">Select incident type</option>
+                            <option value="landslide">Landslide</option>
+                            <option value="flood">Flood</option>
+                            <option value="road-damage">Road Damage</option>
+                            <option value="traffic">Traffic Congestion</option>
+                            <option value="bridge-issue">Bridge Issue</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location (GPS Coordinates)</label>
+                        <input type="text" id="location" placeholder="Auto-captured or enter manually" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Incident Description</label>
+                        <textarea id="description" rows="3" placeholder="Describe the incident in detail..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="severity">Severity Level</label>
+                        <select id="severity" required>
+                            <option value="low">Low - Minor impact</option>
+                            <option value="medium">Medium - Moderate impact</option>
+                            <option value="high">High - Significant impact</option>
+                            <option value="critical">Critical - Emergency situation</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">📸 Submit Incident Report</button>
+                </form>
+            </div>
+
+            <div class="panel">
+                <h2>🤖 AI-Powered Route Intelligence</h2>
+                <div id="alternate-routes">
+                    <div class="loading">Select a route to see AI-powered suggestions...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Chart.js for Risk Trend Graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Main Application Script -->
+    <script>
+        // Application State
+        const appState = {
+            routes: [],
+            incidents: [],
+            weatherData: null,
+            selectedRoute: null
+        };
+
+        // Initialize the map
+        const map = L.map('map').setView([26.0, 93.0], 6); // Centered on NER
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Enhanced route data for NER with AI analysis data
+        const sampleRoutes = [
+            {
+                id: 1,
+                name: "Guwahati - Shillong Highway (NH 6)",
+                status: "clear",
+                riskScore: 15,
+                coordinates: [[26.0, 91.8], [25.6, 91.9]],
+                distance: 103,
+                normalTime: 180,
+                aiAnalysis: {
+                    alternateRoute: "Via Nongpoh - State Highway 40",
+                    detourDistance: 28,
+                    estimatedDelay: 45,
+                    confidence: 95,
+                    factors: ["Light traffic", "Good road conditions", "No weather risks"],
+                    recommendation: "Current route optimal"
+                }
+            },
+            {
+                id: 2,
+                name: "Imphal - Kohima Road (NH 2)",
+                status: "at-risk",
+                riskScore: 65,
+                coordinates: [[24.8, 93.9], [25.6, 94.1]],
+                distance: 147,
+                normalTime: 270,
+                aiAnalysis: {
+                    alternateRoute: "Via Senapati - NH 2 Alternate",
+                    detourDistance: 35,
+                    estimatedDelay: 90,
+                    confidence: 87,
+                    factors: ["Moderate rainfall", "Landslide history", "Construction ongoing"],
+                    recommendation: "Consider alternate route for critical deliveries"
+                }
+            },
+            {
+                id: 3,
+                name: "Dibrugarh - Tinsukia Route (NH 15)",
+                status: "blocked",
+                riskScore: 92,
+                coordinates: [[27.5, 95.0], [27.5, 95.2]],
+                distance: 47,
+                normalTime: 75,
+                aiAnalysis: {
+                    alternateRoute: "Via Dhemaji - NH 15 Bypass",
+                    detourDistance: 52,
+                    estimatedDelay: 180,
+                    confidence: 92,
+                    factors: ["Major landslide", "Road collapse", "Heavy rainfall"],
+                    recommendation: "Alternate route mandatory - expect significant delays"
+                }
+            },
+            {
+                id: 4,
+                name: "Aizawl - Silchar Highway (NH 54)",
+                status: "clear",
+                riskScore: 20,
+                coordinates: [[23.7, 92.9], [24.8, 92.8]],
+                distance: 184,
+                normalTime: 360,
+                aiAnalysis: {
+                    alternateRoute: "Via Vairengte - NH 54 Alternate",
+                    detourDistance: 41,
+                    estimatedDelay: 60,
+                    confidence: 91,
+                    factors: ["Clear weather", "Good visibility", "Light traffic"],
+                    recommendation: "Current route recommended"
+                }
+            },
+            {
+                id: 5,
+                name: "Itanagar - Tezpur Road (NH 13)",
+                status: "at-risk",
+                riskScore: 55,
+                coordinates: [[27.1, 93.6], [26.6, 92.8]],
+                distance: 158,
+                normalTime: 300,
+                aiAnalysis: {
+                    alternateRoute: "Via Bhalukpong - NH 13 Bypass",
+                    detourDistance: 33,
+                    estimatedDelay: 75,
+                    confidence: 84,
+                    factors: ["Fog conditions", "Elevation risks", "Minor road damage"],
+                    recommendation: "Monitor conditions - alternate route available"
+                }
+            },
+            {
+                id: 6,
+                name: "Gangtok - Siliguri Highway (NH 10)",
+                status: "clear",
+                riskScore: 25,
+                coordinates: [[27.3, 88.6], [26.7, 88.4]],
+                distance: 114,
+                normalTime: 240,
+                aiAnalysis: {
+                    alternateRoute: "Via Rangpo - NH 10 Alternate",
+                    detourDistance: 22,
+                    estimatedDelay: 35,
+                    confidence: 93,
+                    factors: ["Pleasant weather", "Good road surface", "Normal traffic"],
+                    recommendation: "Optimal routing conditions"
+                }
+            },
+            {
+                id: 7,
+                name: "Agartala - Guwahati Route (NH 8)",
+                status: "clear",
+                riskScore: 18,
+                coordinates: [[23.8, 91.3], [26.0, 91.8]],
+                distance: 599,
+                normalTime: 720,
+                aiAnalysis: {
+                    alternateRoute: "Via Shillong - NH 8 Express",
+                    detourDistance: 45,
+                    estimatedDelay: 55,
+                    confidence: 96,
+                    factors: ["Excellent conditions", "Low traffic volume", "Clear weather"],
+                    recommendation: "Current route highly recommended"
+                }
+            }
+        ];
+
+        // Color coding function
+        function getStatusColor(status) {
+            switch(status) {
+                case 'clear': return '#10b981';
+                case 'at-risk': return '#f59e0b';
+                case 'blocked': return '#ef4444';
+                default: return '#6b7280';
+            }
+        }
+
+        // Draw routes on map
+        function drawRoutes() {
+            // Clear existing layers
+            map.eachLayer((layer) => {
+                if (layer instanceof L.Polyline) {
+                    map.removeLayer(layer);
+                }
+            });
+
+            sampleRoutes.forEach(route => {
+                const polyline = L.polyline(route.coordinates, {
+                    color: getStatusColor(route.status),
+                    weight: 6,
+                    opacity: 0.9
+                }).addTo(map);
+
+                // Add popup with enhanced information
+                polyline.bindPopup(`
+                    <div style="font-family: Arial, sans-serif; min-width: 250px;">
+                        <h3 style="color: #003366; margin: 0 0 10px 0; font-size: 14px;">${route.name}</h3>
+                        <div style="margin-bottom: 8px;">
+                            <strong>Status:</strong> <span style="color: ${getStatusColor(route.status)}; font-weight: bold;">${route.status.toUpperCase()}</span>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <strong>Risk Score:</strong> ${route.riskScore}%
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <strong>Distance:</strong> ${route.distance} km
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>Normal Travel Time:</strong> ${Math.floor(route.normalTime / 60)}h ${route.normalTime % 60}m
+                        </div>
+                        <button onclick="showAlternateRoute(${route.id})" style="width: 100%; padding: 8px 12px; background: linear-gradient(135deg, #003366, #004080); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 12px;">🤖 View AI Analysis</button>
+                    </div>
+                `);
+
+                // Click handler
+                polyline.on('click', () => {
+                    selectRoute(route);
+                });
+            });
+        }
+
+        // Select a route
+        function selectRoute(route) {
+            appState.selectedRoute = route;
+            updateAlternateRoutes(route);
+        }
+
+        // Show alternate route
+        function showAlternateRoute(routeId) {
+            const route = sampleRoutes.find(r => r.id === routeId);
+            if (route) {
+                selectRoute(route);
+            }
+        }
+
+        // Update alternate routes panel with AI analysis
+        function updateAlternateRoutes(route) {
+            const container = document.getElementById('alternate-routes');
+            if (!route) {
+                container.innerHTML = '<div class="loading">Select a route to see AI-powered suggestions...</div>';
+                return;
+            }
+
+            const ai = route.aiAnalysis;
+            const delayClass = ai.estimatedDelay <= 60 ? 'low' : ai.estimatedDelay <= 120 ? 'moderate' : '';
+            const delayText = ai.estimatedDelay <= 60 ? 'Minor delays expected' : ai.estimatedDelay <= 120 ? 'Moderate delays expected' : 'Significant delays expected';
+
+            container.innerHTML = `
+                <div class="ai-route-card">
+                    <h4>
+                        <span class="ai-badge">AI Analysis</span>
+                        ${route.name}
+                    </h4>
+                    <div class="route-details">
+                        <div class="route-detail-item">
+                            <span class="route-detail-label">Current Status</span>
+                            <span class="route-detail-value" style="color: ${getStatusColor(route.status)}">${route.status.toUpperCase()}</span>
+                        </div>
+                        <div class="route-detail-item">
+                            <span class="route-detail-label">Risk Score</span>
+                            <span class="route-detail-value">${route.riskScore}%</span>
+                        </div>
+                        <div class="route-detail-item">
+                            <span class="route-detail-label">AI Confidence</span>
+                            <span class="route-detail-value">${ai.confidence}%</span>
+                        </div>
+                        <div class="route-detail-item">
+                            <span class="route-detail-label">Normal Travel Time</span>
+                            <span class="route-detail-value">${Math.floor(route.normalTime / 60)}h ${route.normalTime % 60}m</span>
+                        </div>
+                    </div>
+                    <div class="route-description">
+                        <strong>🤖 AI Recommendation:</strong> ${ai.recommendation}
+                    </div>
+                    <div class="route-description">
+                        <strong>📊 Risk Factors:</strong> ${ai.factors.join(', ')}
+                    </div>
+                </div>
+
+                <div class="ai-route-card">
+                    <h4>🔀 Suggested Alternate Route</h4>
+                    <div class="route-details">
+                        <div class="route-detail-item">
+                            <span class="route-detail-label">Alternate Route</span>
+                            <span class="route-detail-value">${ai.alternateRoute}</span>
+                        </div>
+                        <div class="route-detail-item">
+                            <span class="route-detail-label">Detour Distance</span>
+                            <span class="route-detail-value">+${ai.detourDistance} km</span>
+                        </div>
+                        <div class="route-detail-item">
+                            <span class="route-detail-label">Estimated Delay</span>
+                            <span class="route-detail-value">+${Math.floor(ai.estimatedDelay / 60)}h ${ai.estimatedDelay % 60}m</span>
+                        </div>
+                        <div class="route-detail-item">
+                            <span class="route-detail-label">Total Alternate Time</span>
+                            <span class="route-detail-value">${Math.floor((route.normalTime + ai.estimatedDelay) / 60)}h ${(route.normalTime + ai.estimatedDelay) % 60}m</span>
+                        </div>
+                    </div>
+                    <div class="delay-warning ${delayClass}">
+                        <strong>⏱️ Delay Assessment:</strong> ${delayText}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Update route list
+        function updateRouteList() {
+            const container = document.getElementById('route-list');
+            container.innerHTML = sampleRoutes.map(route => `
+                <div class="route-item" onclick="selectRoute(sampleRoutes.find(r => r.id === ${route.id}))">
+                    <div class="route-info">
+                        <div class="route-name">${route.name}</div>
+                        <div class="route-risk">Risk: ${route.riskScore}% | ${route.distance} km</div>
+                    </div>
+                    <span class="route-status ${route.status}">${route.status}</span>
+                </div>
+            `).join('');
+        }
+
+        // Update status counts
+        function updateStatusCounts() {
+            const clear = sampleRoutes.filter(r => r.status === 'clear').length;
+            const atRisk = sampleRoutes.filter(r => r.status === 'at-risk').length;
+            const blocked = sampleRoutes.filter(r => r.status === 'blocked').length;
+
+            document.getElementById('clear-count').textContent = clear;
+            document.getElementById('at-risk-count').textContent = atRisk;
+            document.getElementById('blocked-count').textContent = blocked;
+        }
+
+        // Update timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('last-update').textContent = `Last update: ${timeString}`;
+        }
+
+        // Simulate weather data
+        function updateWeatherData() {
+            // Simulated weather data (in real app, this would come from API)
+            const weatherData = {
+                temperature: Math.floor(Math.random() * 10 + 25), // 25-35°C
+                humidity: Math.floor(Math.random() * 30 + 70), // 70-100%
+                wind: Math.floor(Math.random() * 20 + 5), // 5-25 km/h
+                rainfall: Math.floor(Math.random() * 50) // 0-50 mm
+            };
+
+            document.getElementById('temperature').textContent = weatherData.temperature;
+            document.getElementById('humidity').textContent = weatherData.humidity;
+            document.getElementById('wind').textContent = weatherData.wind;
+            document.getElementById('rainfall').textContent = weatherData.rainfall;
+
+            // Trigger alerts based on weather
+            if (weatherData.rainfall > 30) {
+                showAlert('high-risk', `Heavy rainfall alert! ${weatherData.rainfall}mm recorded. Risk of landslides significantly increased across elevated routes.`);
+            } else if (weatherData.rainfall > 15) {
+                showAlert('normal', `Moderate rainfall: ${weatherData.rainfall}mm. Monitor road conditions in landslide-prone areas.`);
+            } else {
+                hideAlert();
+            }
+
+            updateTimestamp();
+        }
+
+        // Show alert
+        function showAlert(type, message) {
+            const alertBox = document.getElementById('alert-box');
+            const alertTitle = document.getElementById('alert-title');
+            const alertMessage = document.getElementById('alert-message');
+
+            alertBox.classList.remove('high-risk');
+            if (type === 'high-risk') {
+                alertBox.classList.add('high-risk');
+                alertTitle.textContent = '🚨 HIGH RISK ALERT';
+            } else {
+                alertTitle.textContent = '⚠️ Weather Advisory';
+            }
+
+            alertMessage.textContent = message;
+            alertBox.classList.add('active');
+        }
+
+        // Hide alert
+        function hideAlert() {
+            const alertBox = document.getElementById('alert-box');
+            alertBox.classList.remove('active');
+        }
+
+        // Enhanced risk scoring engine
+        function calculateRiskScore(route) {
+            let riskScore = 0;
+
+            // Weather factor (40%)
+            const rainfall = parseInt(document.getElementById('rainfall').textContent) || 0;
+            riskScore += Math.min(rainfall * 1.5, 40);
+
+            // Terrain factor (30%) - based on route characteristics
+            const terrainRisk = Math.floor(Math.random() * 30);
+            riskScore += terrainRisk;
+
+            // Historical incidents and current conditions (30%)
+            const incidentRisk = Math.floor(Math.random() * 30);
+            riskScore += incidentRisk;
+
+            return Math.min(riskScore, 100);
+        }
+
+        // Update route status based on risk score
+        function updateRouteStatuses() {
+            sampleRoutes.forEach(route => {
+                const newRiskScore = calculateRiskScore(route);
+                route.riskScore = newRiskScore;
+
+                if (newRiskScore >= 70) {
+                    route.status = 'blocked';
+                } else if (newRiskScore >= 40) {
+                    route.status = 'at-risk';
+                } else {
+                    route.status = 'clear';
+                }
+            });
+
+            drawRoutes();
+            updateRouteList();
+            updateStatusCounts();
+            updateTimestamp();
+        }
+
+        // Get current location
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude.toFixed(4);
+                        const lng = position.coords.longitude.toFixed(4);
+                        document.getElementById('location').value = `${lat}, ${lng}`;
+                    },
+                    (error) => {
+                        console.log('Geolocation error:', error);
+                        document.getElementById('location').placeholder = 'Location capture failed - enter coordinates manually';
+                    }
+                );
+            } else {
+                document.getElementById('location').placeholder = 'Geolocation not supported - enter coordinates manually';
+            }
+        }
+
+        // Handle incident form submission
+        document.getElementById('incident-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const incident = {
+                type: document.getElementById('incident-type').value,
+                location: document.getElementById('location').value,
+                description: document.getElementById('description').value,
+                severity: document.getElementById('severity').value,
+                timestamp: new Date().toISOString()
+            };
+
+            appState.incidents.push(incident);
+
+            // Show success message
+            alert('Incident reported successfully! The AI system will analyze the impact and update route recommendations accordingly.');
+
+            // Reset form
+            this.reset();
+
+            // Trigger route re-evaluation based on incident severity
+            if (incident.severity === 'high' || incident.severity === 'critical') {
+                showAlert('high-risk', `Critical incident reported: ${incident.type} at ${incident.location}. AI route re-calculation initiated.`);
+                updateRouteStatuses();
+            }
+        });
+
+        // Initialize geolocation on page load
+        window.addEventListener('load', () => {
+            getCurrentLocation();
+            
+            // Initial data load
+            drawRoutes();
+            updateRouteList();
+            updateStatusCounts();
+            updateWeatherData();
+            updateTimestamp();
+
+            // Simulate real-time updates
+            setInterval(() => {
+                updateWeatherData();
+            }, 30000); // Weather updates every 30 seconds
+
+            setInterval(() => {
+                updateRouteStatuses();
+            }, 60000); // Route status updates every minute
+        });
+
+        // Make functions globally available
+        window.selectRoute = selectRoute;
+        window.showAlternateRoute = showAlternateRoute;
+        window.sampleRoutes = sampleRoutes;
+
+        // Dijkstra's Algorithm Implementation for Optimal Route Finding
+        
+        // Graph structure for NER districts
+        const nerGraph = {
+            nodes: {
+                guwahati: { lat: 26.1445, lng: 91.7362, name: "Guwahati" },
+                shillong: { lat: 25.5688, lng: 91.8833, name: "Shillong" },
+                imphal: { lat: 24.8170, lng: 93.9360, name: "Imphal" },
+                kohima: { lat: 25.5690, lng: 94.0080, name: "Kohima" },
+                aizawl: { lat: 23.7271, lng: 92.7176, name: "Aizawl" },
+                agartala: { lat: 23.8315, lng: 91.2868, name: "Agartala" },
+                itanagar: { lat: 27.0833, lng: 93.6167, name: "Itanagar" },
+                gangtok: { lat: 27.3329, lng: 88.6137, name: "Gangtok" },
+                dibrugarh: { lat: 27.4864, lng: 95.0150, name: "Dibrugarh" },
+                silchar: { lat: 24.8333, lng: 92.7833, name: "Silchar" },
+                dimapur: { lat: 25.9167, lng: 93.7333, name: "Dimapur" },
+                siliguri: { lat: 26.7167, lng: 88.4333, name: "Siliguri" }
+            },
+            edges: [
+                { from: "guwahati", to: "shillong", distance: 103, baseRisk: 15, congestion: 0.3 },
+                { from: "guwahati", to: "silchar", distance: 320, baseRisk: 25, congestion: 0.4 },
+                { from: "guwahati", to: "itanagar", distance: 340, baseRisk: 20, congestion: 0.35 },
+                { from: "guwahati", to: "siliguri", distance: 450, baseRisk: 25, congestion: 0.4 },
+                { from: "shillong", to: "silchar", distance: 280, baseRisk: 30, congestion: 0.45 },
+                { from: "shillong", to: "aizawl", distance: 460, baseRisk: 35, congestion: 0.5 },
+                { from: "imphal", to: "kohima", distance: 147, baseRisk: 40, congestion: 0.55 },
+                { from: "imphal", to: "dimapur", distance: 150, baseRisk: 35, congestion: 0.4 },
+                { from: "imphal", to: "aizawl", distance: 380, baseRisk: 45, congestion: 0.6 },
+                { from: "imphal", to: "silchar", distance: 420, baseRisk: 50, congestion: 0.65 },
+                { from: "kohima", to: "dimapur", distance: 74, baseRisk: 25, congestion: 0.3 },
+                { from: "kohima", to: "imphal", distance: 147, baseRisk: 40, congestion: 0.55 },
+                { from: "aizawl", to: "silchar", distance: 184, baseRisk: 20, congestion: 0.25 },
+                { from: "aizawl", to: "agartala", distance: 350, baseRisk: 30, congestion: 0.4 },
+                { from: "agartala", to: "silchar", distance: 180, baseRisk: 15, congestion: 0.2 },
+                { from: "agartala", to: "guwahati", distance: 599, baseRisk: 18, congestion: 0.3 },
+                { from: "itanagar", to: "guwahati", distance: 340, baseRisk: 25, congestion: 0.35 },
+                { from: "itanagar", to: "dibrugarh", distance: 320, baseRisk: 30, congestion: 0.4 },
+                { from: "gangtok", to: "siliguri", distance: 114, baseRisk: 20, congestion: 0.3 },
+                { from: "gangtok", to: "guwahati", distance: 520, baseRisk: 35, congestion: 0.5 },
+                { from: "dibrugarh", to: "guwahati", distance: 440, baseRisk: 25, congestion: 0.35 },
+                { from: "dibrugarh", to: "itanagar", distance: 320, baseRisk: 30, congestion: 0.4 },
+                { from: "dibrugarh", to: "dimapur", distance: 280, baseRisk: 35, congestion: 0.45 },
+                { from: "silchar", to: "guwahati", distance: 320, baseRisk: 25, congestion: 0.4 },
+                { from: "silchar", to: "shillong", distance: 280, baseRisk: 30, congestion: 0.45 },
+                { from: "silchar", to: "imphal", distance: 420, baseRisk: 50, congestion: 0.65 },
+                { from: "dimapur", to: "dibrugarh", distance: 280, baseRisk: 35, congestion: 0.45 },
+                { from: "siliguri", to: "guwahati", distance: 450, baseRisk: 25, congestion: 0.4 }
+            ]
+        };
+
+        // Calculate edge weight based on distance, risk, and congestion
+        function calculateEdgeWeight(edge, disruptionMultiplier = 1) {
+            const w1 = 1.0; // Distance weight
+            const w2 = 2.5; // Risk weight (higher priority for safety)
+            const w3 = 1.5; // Congestion weight
+            
+            const currentRisk = edge.baseRisk * disruptionMultiplier;
+            const weight = (edge.distance * w1) + (currentRisk * w2) + (edge.congestion * 100 * w3);
+            
+            return weight;
+        }
+
+        // Build adjacency list from graph
+        function buildAdjacencyList(disruptionMultiplier = 1) {
+            const adj = {};
+            Object.keys(nerGraph.nodes).forEach(node => {
+                adj[node] = [];
+            });
+            
+            nerGraph.edges.forEach(edge => {
+                const weight = calculateEdgeWeight(edge, disruptionMultiplier);
+                adj[edge.from].push({ to: edge.to, weight, edge });
+                adj[edge.to].push({ to: edge.from, weight, edge });
+            });
+            
+            return adj;
+        }
+
+        // Dijkstra's Algorithm implementation
+        function dijkstra(start, end, disruptionMultiplier = 1) {
+            const adj = buildAdjacencyList(disruptionMultiplier);
+            const distances = {};
+            const previous = {};
+            const visited = new Set();
+            
+            // Initialize distances
+            Object.keys(nerGraph.nodes).forEach(node => {
+                distances[node] = Infinity;
+            });
+            distances[start] = 0;
+            
+            // Priority queue implementation
+            const queue = [{ node: start, distance: 0 }];
+            
+            while (queue.length > 0) {
+                // Sort queue by distance (min-heap simulation)
+                queue.sort((a, b) => a.distance - b.distance);
+                const { node: currentNode } = queue.shift();
+                
+                if (visited.has(currentNode)) continue;
+                visited.add(currentNode);
+                
+                if (currentNode === end) break;
+                
+                adj[currentNode].forEach(({ to, weight, edge }) => {
+                    if (!visited.has(to)) {
+                        const newDist = distances[currentNode] + weight;
+                        if (newDist < distances[to]) {
+                            distances[to] = newDist;
+                            previous[to] = currentNode;
+                            queue.push({ node: to, distance: newDist });
+                        }
+                    }
+                });
+            }
+            
+            // Reconstruct path
+            const path = [];
+            let current = end;
+            while (current !== undefined) {
+                path.unshift(current);
+                current = previous[current];
+            }
+            
+            if (path[0] !== start) {
+                return null; // No path found
+            }
+            
+            // Calculate total distance and risk
+            let totalDistance = 0;
+            let totalRisk = 0;
+            for (let i = 0; i < path.length - 1; i++) {
+                const from = path[i];
+                const to = path[i + 1];
+                const edge = nerGraph.edges.find(e => 
+                    (e.from === from && e.to === to) || (e.from === to && e.to === from)
+                );
+                if (edge) {
+                    totalDistance += edge.distance;
+                    totalRisk += edge.baseRisk * disruptionMultiplier;
+                }
+            }
+            
+            return {
+                path,
+                totalDistance,
+                totalRisk: Math.round(totalRisk / (path.length - 1) || 0),
+                totalWeight: distances[end]
+            };
+        }
+
+        // Draw optimal path on map
+        let optimalPathLayer = null;
+
+        function drawOptimalPath(pathResult) {
+            // Remove previous optimal path
+            if (optimalPathLayer) {
+                map.removeLayer(optimalPathLayer);
+            }
+            
+            if (!pathResult) return;
+            
+            const coordinates = pathResult.path.map(nodeId => {
+                const node = nerGraph.nodes[nodeId];
+                return [node.lat, node.lng];
+            });
+            
+            // Draw the optimal path with distinctive style
+            optimalPathLayer = L.polyline(coordinates, {
+                color: '#ff6b6b',
+                weight: 8,
+                opacity: 0.9,
+                dashArray: '10, 10'
+            }).addTo(map);
+            
+            // Add markers for start and end
+            const startNode = nerGraph.nodes[pathResult.path[0]];
+            const endNode = nerGraph.nodes[pathResult.path[pathResult.path.length - 1]];
+            
+            L.marker([startNode.lat, startNode.lng], {
+                icon: L.divIcon({
+                    className: 'start-marker',
+                    html: '🚀',
+                    iconSize: [30, 30]
+                })
+            }).addTo(map).bindPopup(`Start: ${startNode.name}`);
+            
+            L.marker([endNode.lat, endNode.lng], {
+                icon: L.divIcon({
+                    className: 'end-marker',
+                    html: '🎯',
+                    iconSize: [30, 30]
+                })
+            }).addTo(map).bindPopup(`End: ${endNode.name}`);
+            
+            // Fit map to show the entire path
+            map.fitBounds(optimalPathLayer.getBounds(), { padding: [50, 50] });
+        }
+
+        // Find optimal route button handler
+        document.getElementById('find-optimal-route').addEventListener('click', () => {
+            const startDistrict = document.getElementById('start-district').value;
+            const endDistrict = document.getElementById('end-district').value;
+            
+            if (!startDistrict || !endDistrict) {
+                alert('Please select both start and end districts');
+                return;
+            }
+            
+            if (startDistrict === endDistrict) {
+                alert('Start and end districts cannot be the same');
+                return;
+            }
+            
+            const result = dijkstra(startDistrict, endDistrict);
+            
+            if (!result) {
+                alert('No path found between the selected districts');
+                return;
+            }
+            
+            // Draw the path on map
+            drawOptimalPath(result);
+            
+            // Display results
+            const pathNames = result.path.map(nodeId => nerGraph.nodes[nodeId].name).join(' → ');
+            const estimatedTime = Math.round(result.totalDistance / 50 * 60); // Assuming 50 km/h average
+            
+            document.getElementById('optimal-distance').textContent = `${result.totalDistance} km`;
+            document.getElementById('optimal-risk').textContent = `${result.totalRisk}%`;
+            document.getElementById('optimal-time').textContent = `${Math.floor(estimatedTime / 60)}h ${estimatedTime % 60}m`;
+            document.getElementById('optimal-path').textContent = pathNames;
+            
+            document.getElementById('route-results').style.display = 'block';
+        });
+
+        // Simulate disruption button handler
+        let disruptionActive = false;
+        document.getElementById('simulate-disruption').addEventListener('click', () => {
+            const startDistrict = document.getElementById('start-district').value;
+            const endDistrict = document.getElementById('end-district').value;
+            
+            if (!startDistrict || !endDistrict) {
+                alert('Please select both start and end districts first');
+                return;
+            }
+            
+            disruptionActive = !disruptionActive;
+            const disruptionMultiplier = disruptionActive ? 3.0 : 1.0;
+            
+            const btn = document.getElementById('simulate-disruption');
+            if (disruptionActive) {
+                btn.textContent = '🔄 Reset Disruption';
+                btn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                alert('Disruption simulated! Risk scores have increased. Click "Find Optimal Route" to see the new path.');
+            } else {
+                btn.textContent = '⚡ Simulate Disruption';
+                btn.style.background = '';
+            }
+            
+            // Re-run Dijkstra with new weights
+            const result = dijkstra(startDistrict, endDistrict, disruptionMultiplier);
+            
+            if (result) {
+                drawOptimalPath(result);
+                
+                const pathNames = result.path.map(nodeId => nerGraph.nodes[nodeId].name).join(' → ');
+                const estimatedTime = Math.round(result.totalDistance / 50 * 60);
+                
+                document.getElementById('optimal-distance').textContent = `${result.totalDistance} km`;
+                document.getElementById('optimal-risk').textContent = `${result.totalRisk}%`;
+                document.getElementById('optimal-time').textContent = `${Math.floor(estimatedTime / 60)}h ${estimatedTime % 60}m`;
+                document.getElementById('optimal-path').textContent = pathNames;
+            }
+        });
+
+        // Tab Switching Functionality
+        function initializeTabSwitching() {
+            const tabLinks = document.querySelectorAll('[data-tab]');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tabId = link.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and links
+                    tabLinks.forEach(l => l.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked link and corresponding tab
+                    link.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // Initialize Route Analytics if switching to that tab
+                    if (tabId === 'route-analytics') {
+                        initializeRouteAnalytics();
+                    }
+                    
+                    // Initialize Weather Monitoring if switching to that tab
+                    if (tabId === 'weather-monitoring') {
+                        initializeWeatherMonitoring();
+                    }
+                    
+                    // Initialize Incident Reports if switching to that tab
+                    if (tabId === 'incident-reports') {
+                        loadIncidentReports();
+                    }
+                });
+            });
+        }
+
+        // Initialize tab switching when DOM is ready
+        document.addEventListener('DOMContentLoaded', initializeTabSwitching);
+
+        // Route Analytics Data and Functions
+        const routeAnalyticsData = {
+            reliability: [
+                { rank: 1, route: "NH-27", from: "Guwahati", to: "Silchar", reliability: 92, trend: "up" },
+                { rank: 2, route: "NH-44", from: "Guwahati", to: "Shillong", reliability: 88, trend: "up" },
+                { rank: 3, route: "NH-37", from: "Guwahati", to: "Itanagar", reliability: 85, trend: "stable" },
+                { rank: 4, route: "NH-2", from: "Dimapur", to: "Kohima", reliability: 82, trend: "down" },
+                { rank: 5, route: "NH-54", from: "Silchar", to: "Aizawl", reliability: 78, trend: "down" },
+                { rank: 6, route: "NH-8", from: "Aizawl", to: "Agartala", reliability: 75, trend: "stable" },
+                { rank: 7, route: "NH-52", from: "Imphal", to: "Silchar", reliability: 72, trend: "down" },
+                { rank: 8, route: "NH-39", from: "Imphal", to: "Kohima", reliability: 68, trend: "down" },
+                { rank: 9, route: "NH-31", from: "Siliguri", to: "Guwahati", reliability: 65, trend: "stable" },
+                { rank: 10, route: "NH-15", from: "Dibrugarh", to: "Guwahati", reliability: 62, trend: "down" }
+            ],
+            disruptions: [
+                { rank: 1, route: "NH-2 (Dimapur–Kohima)", incidents: 23 },
+                { rank: 2, route: "NH-54 (Silchar–Aizawl)", incidents: 19 },
+                { rank: 3, route: "NH-52 (Imphal–Silchar)", incidents: 17 },
+                { rank: 4, route: "NH-39 (Imphal–Kohima)", incidents: 15 },
+                { rank: 5, route: "NH-15 (Dibrugarh–Guwahati)", incidents: 12 }
+            ],
+            riskTrends: {
+                "NH-27": [45, 48, 52, 55, 50, 47, 45, 42, 40, 38, 35, 33, 30, 28, 25, 23, 20, 18, 15, 13, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1],
+                "NH-44": [35, 38, 42, 45, 48, 52, 55, 50, 47, 44, 40, 38, 35, 32, 30, 28, 25, 23, 20, 18, 15, 13, 10, 8, 6, 5, 4, 3, 2, 1],
+                "NH-37": [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5],
+                "NH-2": [20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35],
+                "NH-54": [40, 38, 42, 45, 48, 52, 55, 58, 62, 65, 68, 72, 75, 78, 82, 85, 88, 92, 95, 98, 102, 105, 108, 112, 115, 118, 122, 125, 128, 132]
+            }
+        };
+
+        let riskChart = null;
+
+        function initializeRouteAnalytics() {
+            populateReliabilityTable();
+            populateDisruptionLeaderboard();
+            populateRouteSelector();
+        }
+
+        function populateReliabilityTable() {
+            const tbody = document.getElementById('reliability-table-body');
+            tbody.innerHTML = '';
+
+            routeAnalyticsData.reliability.forEach(route => {
+                const row = document.createElement('tr');
+                
+                const reliabilityClass = route.reliability >= 80 ? 'high' : route.reliability >= 65 ? 'medium' : 'low';
+                const trendText = route.trend === 'up' ? 'Improving' : route.trend === 'down' ? 'Declining' : 'Stable';
+                const trendClass = route.trend === 'up' ? 'trend-up' : route.trend === 'down' ? 'trend-down' : 'trend-stable';
+
+                row.innerHTML = `
+                    <td>${route.rank}</td>
+                    <td><strong>${route.route}</strong></td>
+                    <td>${route.from}</td>
+                    <td>${route.to}</td>
+                    <td><span class="reliability-badge reliability-${reliabilityClass}">${route.reliability}%</span></td>
+                    <td class="${trendClass}">${trendText}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function populateDisruptionLeaderboard() {
+            const container = document.getElementById('disruption-leaderboard');
+            container.innerHTML = '';
+
+            routeAnalyticsData.disruptions.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'disruption-item';
+                div.innerHTML = `
+                    <div class="disruption-rank">#${item.rank}</div>
+                    <div class="disruption-info">
+                        <div class="disruption-route">${item.route}</div>
+                        <div style="font-size: 12px; color: #666;">Last 30 days</div>
+                    </div>
+                    <div class="disruption-count">${item.incidents}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function populateRouteSelector() {
+            const select = document.getElementById('route-select');
+            select.innerHTML = '<option value="">Select a route to view trend</option>';
+            
+            Object.keys(routeAnalyticsData.riskTrends).forEach(route => {
+                const option = document.createElement('option');
+                option.value = route;
+                option.textContent = route;
+                select.appendChild(option);
+            });
+
+            select.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    updateRiskChart(e.target.value);
+                }
+            });
+        }
+
+        function updateRiskChart(routeName) {
+            const ctx = document.getElementById('risk-trend-chart').getContext('2d');
+            const data = routeAnalyticsData.riskTrends[routeName];
+            
+            // Generate last 30 days labels
+            const labels = [];
+            const today = new Date();
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+            }
+
+            if (riskChart) {
+                riskChart.destroy();
+            }
+
+            riskChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Risk Score',
+                        data: data,
+                        borderColor: '#003366',
+                        backgroundColor: 'rgba(0, 51, 102, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#003366',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: `${routeName} - 30 Day Risk Trend`
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Risk Score'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Weather Monitoring Data and Functions
+        const weatherData = {
+            current: {
+                temperature: 28,
+                humidity: 75,
+                windSpeed: 12,
+                windDirection: 45,
+                precipitation: 5,
+                pressure: 1013
+            },
+            historicalPressure: [1015, 1014, 1013, 1012, 1011, 1010], // Last 6 hours (oldest to newest)
+            districts: [
+                { name: "Guwahati", temp: 30, humidity: 72, wind: 10, precip: 3, pressure: 1012 },
+                { name: "Shillong", temp: 22, humidity: 85, wind: 15, precip: 8, pressure: 1010 },
+                { name: "Imphal", temp: 26, humidity: 78, wind: 12, precip: 5, pressure: 1011 },
+                { name: "Kohima", temp: 20, humidity: 88, wind: 18, precip: 12, pressure: 1008 },
+                { name: "Aizawl", temp: 24, humidity: 82, wind: 14, precip: 7, pressure: 1009 },
+                { name: "Agartala", temp: 29, humidity: 70, wind: 8, precip: 2, pressure: 1014 },
+                { name: "Itanagar", temp: 25, humidity: 80, wind: 11, precip: 4, pressure: 1011 },
+                { name: "Gangtok", temp: 18, humidity: 90, wind: 20, precip: 15, pressure: 1007 },
+                { name: "Dibrugarh", temp: 27, humidity: 76, wind: 9, precip: 3, pressure: 1013 },
+                { name: "Silchar", temp: 28, humidity: 74, wind: 10, precip: 4, pressure: 1012 }
+            ]
+        };
+
+        function initializeWeatherMonitoring() {
+            updateWeatherMetrics();
+            updateDistrictWeatherGrid();
+            
+            // Simulate real-time updates every 30 seconds
+            setInterval(() => {
+                simulateWeatherChanges();
+                updateWeatherMetrics();
+                updateDistrictWeatherGrid();
+            }, 30000);
+        }
+
+        function simulateWeatherChanges() {
+            // Randomly fluctuate weather values
+            weatherData.current.temperature += (Math.random() - 0.5) * 2;
+            weatherData.current.humidity += (Math.random() - 0.5) * 5;
+            weatherData.current.windSpeed += (Math.random() - 0.5) * 3;
+            weatherData.current.windDirection += (Math.random() - 0.5) * 20;
+            weatherData.current.precipitation = Math.max(0, weatherData.current.precipitation + (Math.random() - 0.5) * 5);
+            weatherData.current.pressure += (Math.random() - 0.5) * 2;
+            
+            // Update pressure history
+            weatherData.historicalPressure.shift();
+            weatherData.historicalPressure.push(weatherData.current.pressure);
+            
+            // Keep values in reasonable ranges
+            weatherData.current.temperature = Math.max(15, Math.min(40, weatherData.current.temperature));
+            weatherData.current.humidity = Math.max(40, Math.min(95, weatherData.current.humidity));
+            weatherData.current.windSpeed = Math.max(0, Math.min(50, weatherData.current.windSpeed));
+            weatherData.current.precipitation = Math.max(0, Math.min(50, weatherData.current.precipitation));
+            weatherData.current.pressure = Math.max(990, Math.min(1030, weatherData.current.pressure));
+        }
+
+        function updateWeatherMetrics() {
+            // Temperature
+            const temp = Math.round(weatherData.current.temperature);
+            document.getElementById('temp-value').textContent = `${temp}°C`;
+            const tempIcon = temp > 30 ? '☀️' : temp > 20 ? '⛅' : '🌧️';
+            document.getElementById('temp-icon').textContent = tempIcon;
+            
+            // Humidity
+            const humidity = Math.round(weatherData.current.humidity);
+            document.getElementById('humidity-value').textContent = `${humidity}%`;
+            
+            // Wind Speed & Direction
+            const windSpeed = Math.round(weatherData.current.windSpeed);
+            document.getElementById('wind-value').textContent = `${windSpeed} km/h`;
+            const windDirection = Math.round(weatherData.current.windDirection);
+            const windArrow = document.getElementById('wind-arrow');
+            windArrow.style.transform = `rotate(${windDirection}deg)`;
+            
+            // Precipitation (Primary Risk Driver)
+            const precip = Math.round(weatherData.current.precipitation);
+            document.getElementById('precipitation-value').textContent = `${precip} mm/hr`;
+            const precipStatus = document.getElementById('precipitation-status');
+            
+            if (precip < 10) {
+                precipStatus.textContent = 'Normal Risk';
+                precipStatus.className = 'precipitation-status green';
+            } else if (precip < 30) {
+                precipStatus.textContent = 'Elevated Risk';
+                precipStatus.className = 'precipitation-status yellow';
+            } else {
+                precipStatus.textContent = 'High Risk';
+                precipStatus.className = 'precipitation-status red';
+            }
+            
+            // Barometric Pressure (Predictive Indicator)
+            const pressure = Math.round(weatherData.current.pressure);
+            document.getElementById('pressure-value').textContent = `${pressure} hPa`;
+            
+            // Calculate pressure trend (compare current to 3 hours ago)
+            const pressure3HoursAgo = weatherData.historicalPressure[weatherData.historicalPressure.length - 4] || pressure;
+            const pressureChange = pressure - pressure3HoursAgo;
+            const pressureTrend = document.getElementById('pressure-trend');
+            const pressureWarning = document.getElementById('pressure-warning');
+            
+            if (pressureChange <= -3) {
+                pressureTrend.textContent = '↓';
+                pressureWarning.style.display = 'block';
+            } else if (pressureChange >= 3) {
+                pressureTrend.textContent = '↑';
+                pressureWarning.style.display = 'none';
+            } else {
+                pressureTrend.textContent = '→';
+                pressureWarning.style.display = 'none';
+            }
+        }
+
+        function updateDistrictWeatherGrid() {
+            const grid = document.getElementById('district-weather-grid');
+            grid.innerHTML = '';
+            
+            weatherData.districts.forEach(district => {
+                const card = document.createElement('div');
+                
+                // Determine risk level based on precipitation
+                let riskClass = 'low-risk';
+                if (district.precip >= 30) {
+                    riskClass = 'high-risk';
+                } else if (district.precip >= 10) {
+                    riskClass = 'medium-risk';
+                }
+                
+                card.className = `district-weather-card ${riskClass}`;
+                card.innerHTML = `
+                    <div class="district-name">${district.name}</div>
+                    <div class="district-metrics">
+                        <div class="district-metric">
+                            <span class="district-metric-label">Temperature</span>
+                            <span class="district-metric-value">${Math.round(district.temp)}°C</span>
+                        </div>
+                        <div class="district-metric">
+                            <span class="district-metric-label">Humidity</span>
+                            <span class="district-metric-value">${Math.round(district.humidity)}%</span>
+                        </div>
+                        <div class="district-metric">
+                            <span class="district-metric-label">Wind</span>
+                            <span class="district-metric-value">${Math.round(district.wind)} km/h</span>
+                        </div>
+                        <div class="district-metric">
+                            <span class="district-metric-label">Precipitation</span>
+                            <span class="district-metric-value">${Math.round(district.precip)} mm/hr</span>
+                        </div>
+                        <div class="district-metric">
+                            <span class="district-metric-label">Pressure</span>
+                            <span class="district-metric-value">${Math.round(district.pressure)} hPa</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Incident Reports Database Functions
+        function getIncidentReports() {
+            const reports = localStorage.getItem('incidentReports');
+            return reports ? JSON.parse(reports) : [];
+        }
+
+        function saveIncidentReport(report) {
+            const reports = getIncidentReports();
+            report.id = Date.now();
+            report.timestamp = new Date().toISOString();
+            reports.unshift(report); // Add to beginning of array
+            localStorage.setItem('incidentReports', JSON.stringify(reports));
+            return report;
+        }
+
+        function loadIncidentReports() {
+            const reports = getIncidentReports();
+            const listContainer = document.getElementById('incident-reports-list');
+            
+            if (reports.length === 0) {
+                listContainer.innerHTML = '<div class="no-reports">No incident reports submitted yet. Use the form below to submit your first report.</div>';
+                return;
+            }
+
+            listContainer.innerHTML = '<div class="incident-reports-list"></div>';
+            const list = listContainer.querySelector('.incident-reports-list');
+
+            reports.forEach(report => {
+                const card = document.createElement('div');
+                card.className = 'incident-card';
+                card.dataset.id = report.id;
+                
+                const date = new Date(report.timestamp);
+                const formattedDate = date.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const severityClass = `severity-${report.severity}`;
+                const severityLabel = report.severity.charAt(0).toUpperCase() + report.severity.slice(1);
+
+                card.innerHTML = `
+                    <div class="incident-card-header">
+                        <span class="incident-type">${report.incidentType.charAt(0).toUpperCase() + report.incidentType.slice(1)}</span>
+                        <span class="incident-date">${formattedDate}</span>
+                    </div>
+                    <div class="incident-location">📍 ${report.location}</div>
+                    <span class="incident-severity ${severityClass}">${severityLabel}</span>
+                `;
+
+                card.addEventListener('click', () => showIncidentDetail(report.id));
+                list.appendChild(card);
+            });
+        }
+
+        function showIncidentDetail(reportId) {
+            const reports = getIncidentReports();
+            const report = reports.find(r => r.id === reportId);
+            
+            if (!report) return;
+
+            // Hide list view, show detail view
+            document.getElementById('incident-reports-list').parentElement.style.display = 'none';
+            const detailView = document.getElementById('incident-detail-view');
+            detailView.style.display = 'block';
+
+            const date = new Date(report.timestamp);
+            const formattedDate = date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            const severityLabel = report.severity.charAt(0).toUpperCase() + report.severity.slice(1);
+            const typeLabel = report.incidentType.charAt(0).toUpperCase() + report.incidentType.slice(1);
+
+            document.getElementById('incident-detail-content').innerHTML = `
+                <div class="incident-detail">
+                    <div class="detail-row">
+                        <span class="detail-label">Incident Type</span>
+                        <span class="detail-value">${typeLabel}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Location</span>
+                        <span class="detail-value">${report.location}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Severity</span>
+                        <span class="detail-value">${severityLabel}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Description</span>
+                        <span class="detail-value">${report.description}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Submitted On</span>
+                        <span class="detail-value">${formattedDate}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Report ID</span>
+                        <span class="detail-value">#${report.id}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Back to list button handler
+        document.getElementById('back-to-list').addEventListener('click', () => {
+            document.getElementById('incident-detail-view').style.display = 'none';
+            document.getElementById('incident-reports-list').parentElement.style.display = 'block';
+        });
+
+        // Update incident form to save to localStorage
+        document.getElementById('incident-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const report = {
+                incidentType: document.getElementById('incident-type').value,
+                location: document.getElementById('location').value,
+                description: document.getElementById('description').value,
+                severity: document.getElementById('severity').value
+            };
+
+            saveIncidentReport(report);
+            
+            // Reset form
+            this.reset();
+            
+            // Show success message
+            alert('Incident report submitted successfully!');
+            
+            // If on incident reports tab, reload the list
+            if (document.getElementById('incident-reports-tab').classList.contains('active')) {
+                loadIncidentReports();
+            }
+        });
+
+        // Navigation Settings Dropdown and Theme Toggle Functionality
+        const settingsNavBtn = document.getElementById('settings-nav-btn');
+        const navSettingsDropdown = document.getElementById('nav-settings-dropdown');
+        const navLightModeBtn = document.getElementById('nav-light-mode-btn');
+        const navDarkModeBtn = document.getElementById('nav-dark-mode-btn');
+        const body = document.body;
+
+        // Check for saved theme preference or default to light mode
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+
+        // Toggle navigation settings dropdown
+        settingsNavBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            navSettingsDropdown.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navSettingsDropdown.contains(e.target) && !settingsNavBtn.contains(e.target)) {
+                navSettingsDropdown.classList.remove('active');
+            }
+        });
+
+        // Set theme function
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+            navSettingsDropdown.classList.remove('active');
+        }
+
+        // Light mode button click handler
+        navLightModeBtn.addEventListener('click', () => {
+            setTheme('light');
+        });
+
+        // Dark mode button click handler
+        navDarkModeBtn.addEventListener('click', () => {
+            setTheme('dark');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+{
+  "reliability": [
+    {
+      "rank": 1,
+      "route": "NH-27",
+      "from": "Guwahati",
+      "to": "Silchar",
+      "reliability": 92,
+      "trend": "up"
+    },
+    {
+      "rank": 2,
+      "route": "NH-44",
+      "from": "Guwahati",
+      "to": "Shillong",
+      "reliability": 88,
+      "trend": "up"
+    },
+    {
+      "rank": 3,
+      "route": "NH-37",
+      "from": "Guwahati",
+      "to": "Itanagar",
+      "reliability": 85,
+      "trend": "stable"
+    },
+    {
+      "rank": 4,
+      "route": "NH-2",
+      "from": "Dimapur",
+      "to": "Kohima",
+      "reliability": 82,
+      "trend": "down"
+    },
+    {
+      "rank": 5,
+      "route": "NH-54",
+      "from": "Silchar",
+      "to": "Aizawl",
+      "reliability": 78,
+      "trend": "down"
+    },
+    {
+      "rank": 6,
+      "route": "NH-8",
+      "from": "Aizawl",
+      "to": "Agartala",
+      "reliability": 75,
+      "trend": "stable"
+    },
+    {
+      "rank": 7,
+      "route": "NH-52",
+      "from": "Imphal",
+      "to": "Silchar",
+      "reliability": 72,
+      "trend": "down"
+    },
+    {
+      "rank": 8,
+      "route": "NH-39",
+      "from": "Imphal",
+      "to": "Kohima",
+      "reliability": 68,
+      "trend": "down"
+    },
+    {
+      "rank": 9,
+      "route": "NH-31",
+      "from": "Siliguri",
+      "to": "Guwahati",
+      "reliability": 65,
+      "trend": "stable"
+    },
+    {
+      "rank": 10,
+      "route": "NH-15",
+      "from": "Dibrugarh",
+      "to": "Guwahati",
+      "reliability": 62,
+      "trend": "down"
+    }
+  ]
+}

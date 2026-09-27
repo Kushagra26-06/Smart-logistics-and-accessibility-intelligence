@@ -1,0 +1,37 @@
+<mxfile host="app.diagrams.net" agent="Claude">
+  <diagram name="ER Diagram" id="er-diagram">
+    <mxGraphModel dx="1173" dy="555" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="e1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="&lt;b&gt;District&lt;/b&gt;&lt;br&gt;&lt;hr size=&#39;1&#39;&gt;&lt;br&gt;&lt;u&gt;district_id (PK)&lt;/u&gt;&lt;br&gt;name&lt;br&gt;state&lt;br&gt;latitude&lt;br&gt;longitude" vertex="1">
+          <mxGeometry height="140" width="220" x="520" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="&lt;b&gt;Route&lt;/b&gt;&lt;br&gt;&lt;hr size=&#39;1&#39;&gt;&lt;br&gt;&lt;u&gt;route_id (PK)&lt;/u&gt;&lt;br&gt;highway_no&lt;br&gt;from_district_id (FK)&lt;br&gt;to_district_id (FK)&lt;br&gt;distance_km&lt;br&gt;risk_score" vertex="1">
+          <mxGeometry height="170" width="250" x="130" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="&lt;b&gt;WeatherReading&lt;/b&gt;&lt;br&gt;&lt;hr size=&#39;1&#39;&gt;&lt;br&gt;&lt;u&gt;reading_id (PK)&lt;/u&gt;&lt;br&gt;district_id (FK)&lt;br&gt;temperature&lt;br&gt;humidity&lt;br&gt;precipitation&lt;br&gt;pressure&lt;br&gt;timestamp" vertex="1">
+          <mxGeometry height="190" width="250" x="480" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="&lt;b&gt;IncidentReport&lt;/b&gt;&lt;br&gt;&lt;hr size=&#39;1&#39;&gt;&lt;br&gt;&lt;u&gt;report_id (PK)&lt;/u&gt;&lt;br&gt;route_id (FK)&lt;br&gt;officer_name&lt;br&gt;incident_type&lt;br&gt;latitude&lt;br&gt;longitude&lt;br&gt;timestamp&lt;br&gt;status" vertex="1">
+          <mxGeometry height="210" width="250" x="110" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="&lt;b&gt;User&lt;/b&gt;&lt;br&gt;&lt;hr size=&#39;1&#39;&gt;&lt;br&gt;&lt;u&gt;user_id (PK)&lt;/u&gt;&lt;br&gt;name&lt;br&gt;role&lt;br&gt;district_id (FK)" vertex="1">
+          <mxGeometry height="140" width="220" x="870" y="265" as="geometry" />
+        </mxCell>
+        <mxCell id="ee_e1_e2_0" edge="1" parent="1" source="e1" style="edgeStyle=entityRelationEdgeStyle;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;fontSize=11;fontStyle=1;" target="e2" value="has">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ee_e1_e3_1" edge="1" parent="1" source="e1" style="edgeStyle=entityRelationEdgeStyle;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;fontSize=11;fontStyle=1;" target="e3" value="records">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ee_e1_e5_2" edge="1" parent="1" source="e1" style="edgeStyle=entityRelationEdgeStyle;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;fontSize=11;fontStyle=1;" target="e5" value="assigns">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ee_e2_e4_3" edge="1" parent="1" source="e2" style="edgeStyle=entityRelationEdgeStyle;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;fontSize=11;fontStyle=1;" target="e4" value="receives">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

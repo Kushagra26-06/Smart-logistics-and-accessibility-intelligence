@@ -1,0 +1,29 @@
+{
+  "disruptions": [
+    {
+      "rank": 1,
+      "route": "NH-2 (Dimapur–Kohima)",
+      "incidents": 23
+    },
+    {
+      "rank": 2,
+      "route": "NH-54 (Silchar–Aizawl)",
+      "incidents": 19
+    },
+    {
+      "rank": 3,
+      "route": "NH-52 (Imphal–Silchar)",
+      "incidents": 17
+    },
+    {
+      "rank": 4,
+      "route": "NH-39 (Imphal–Kohima)",
+      "incidents": 15
+    },
+    {
+      "rank": 5,
+      "route": "NH-15 (Dibrugarh–Guwahati)",
+      "incidents": 12
+    }
+  ]
+}

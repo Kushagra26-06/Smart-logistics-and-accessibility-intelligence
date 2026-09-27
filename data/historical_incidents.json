@@ -1,0 +1,104 @@
+{
+  "incidents": [
+    {
+      "id": 1726032000000,
+      "incidentType": "landslide",
+      "location": "NH-2, Dimapur-Kohima",
+      "description": "Major landslide blocking road for 6 hours",
+      "severity": "high",
+      "timestamp": "2024-09-01T08:30:00Z",
+      "resolved": true,
+      "resolutionTime": "2024-09-01T14:30:00Z"
+    },
+    {
+      "id": 1725945600000,
+      "incidentType": "flood",
+      "location": "NH-54, Silchar-Aizawl",
+      "description": "Flash flood causing road damage",
+      "severity": "critical",
+      "timestamp": "2024-08-31T15:00:00Z",
+      "resolved": true,
+      "resolutionTime": "2024-09-02T10:00:00Z"
+    },
+    {
+      "id": 1725859200000,
+      "incidentType": "road-damage",
+      "location": "NH-37, Guwahati-Itanagar",
+      "description": "Pothole formation due to heavy rain",
+      "severity": "medium",
+      "timestamp": "2024-08-30T12:00:00Z",
+      "resolved": true,
+      "resolutionTime": "2024-08-31T18:00:00Z"
+    },
+    {
+      "id": 1725772800000,
+      "incidentType": "traffic",
+      "location": "NH-27, Guwahati-Silchar",
+      "description": "Heavy congestion due to accident",
+      "severity": "low",
+      "timestamp": "2024-08-29T09:00:00Z",
+      "resolved": true,
+      "resolutionTime": "2024-08-29T12:00:00Z"
+    },
+    {
+      "id": 1725686400000,
+      "incidentType": "bridge-issue",
+      "location": "NH-52, Imphal-Silchar",
+      "description": "Bridge structural damage detected",
+      "severity": "high",
+      "timestamp": "2024-08-28T14:00:00Z",
+      "resolved": false,
+      "resolutionTime": null
+    },
+    {
+      "id": 1725600000000,
+      "incidentType": "landslide",
+      "location": "NH-15, Dibrugarh-Guwahati",
+      "description": "Minor landslide, partial blockage",
+      "severity": "medium",
+      "timestamp": "2024-08-27T11:00:00Z",
+      "resolved": true,
+      "resolutionTime": "2024-08-27T16:00:00Z"
+    },
+    {
+      "id": 1725513600000,
+      "incidentType": "flood",
+      "location": "NH-39, Imphal-Kohima",
+      "description": "Water logging on road",
+      "severity": "low",
+      "timestamp": "2024-08-26T07:00:00Z",
+      "resolved": true,
+      "resolutionTime": "2024-08-26T12:00:00Z"
+    },
+    {
+      "id": 1725427200000,
+      "incidentType": "road-damage",
+      "location": "NH-44, Guwahati-Shillong",
+      "description": "Road surface erosion",
+      "severity": "medium",
+      "timestamp": "2024-08-25T10:00:00Z",
+      "resolved": true,
+      "resolutionTime": "2024-08-26T08:00:00Z"
+    },
+    {
+      "id": 1725340800000,
+      "incidentType": "landslide",
+      "location": "NH-8, Aizawl-Agartala",
+      "description": "Rock fall on road",
+      "severity": "high",
+      "timestamp": "2024-08-24T13:00:00Z",
+      "resolved": true,
+      "resolutionTime": "2024-08-24T18:00:00Z"
+    },
+    {
+      "id": 1725254400000,
+      "incidentType": "traffic",
+      "location": "NH-31, Siliguri-Guwahati",
+      "description": "Traffic jam due to construction",
+      "severity": "low",
+      "timestamp": "2024-08-23T08:00:00Z",
+      "resolved": true,
+      "resolutionTime": "2024-08-23T14:00:00Z"
+    }
+  ]
+}

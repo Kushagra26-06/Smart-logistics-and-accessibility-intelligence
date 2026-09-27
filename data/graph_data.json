@@ -1,0 +1,255 @@
+{
+  "nodes": {
+    "guwahati": {
+      "name": "Guwahati",
+      "lat": 26.1445,
+      "lng": 91.7362
+    },
+    "shillong": {
+      "name": "Shillong",
+      "lat": 25.5688,
+      "lng": 91.8833
+    },
+    "imphal": {
+      "name": "Imphal",
+      "lat": 24.8170,
+      "lng": 93.9368
+    },
+    "kohima": {
+      "name": "Kohima",
+      "lat": 25.6129,
+      "lng": 94.1080
+    },
+    "aizawl": {
+      "name": "Aizawl",
+      "lat": 23.7271,
+      "lng": 92.7176
+    },
+    "agartala": {
+      "name": "Agartala",
+      "lat": 23.8315,
+      "lng": 91.2868
+    },
+    "itanagar": {
+      "name": "Itanagar",
+      "lat": 27.0836,
+      "lng": 93.6173
+    },
+    "gangtok": {
+      "name": "Gangtok",
+      "lat": 27.3314,
+      "lng": 88.6138
+    },
+    "dibrugarh": {
+      "name": "Dibrugarh",
+      "lat": 27.4728,
+      "lng": 94.9120
+    },
+    "silchar": {
+      "name": "Silchar",
+      "lat": 24.8333,
+      "lng": 92.7833
+    },
+    "dimapur": {
+      "name": "Dimapur",
+      "lat": 25.9129,
+      "lng": 93.7336
+    },
+    "siliguri": {
+      "name": "Siliguri",
+      "lat": 26.7271,
+      "lng": 88.3952
+    }
+  },
+  "edges": [
+    {
+      "from": "guwahati",
+      "to": "shillong",
+      "distance": 100,
+      "risk": 15,
+      "congestion": 20
+    },
+    {
+      "from": "guwahati",
+      "to": "itanagar",
+      "distance": 320,
+      "risk": 25,
+      "congestion": 15
+    },
+    {
+      "from": "guwahati",
+      "to": "silchar",
+      "distance": 310,
+      "risk": 20,
+      "congestion": 25
+    },
+    {
+      "from": "guwahati",
+      "to": "dibrugarh",
+      "distance": 440,
+      "risk": 18,
+      "congestion": 20
+    },
+    {
+      "from": "guwahati",
+      "to": "siliguri",
+      "distance": 460,
+      "risk": 12,
+      "congestion": 30
+    },
+    {
+      "from": "shillong",
+      "to": "silchar",
+      "distance": 280,
+      "risk": 22,
+      "congestion": 18
+    },
+    {
+      "from": "shillong",
+      "to": "aizawl",
+      "distance": 350,
+      "risk": 28,
+      "congestion": 15
+    },
+    {
+      "from": "imphal",
+      "to": "silchar",
+      "distance": 180,
+      "risk": 30,
+      "congestion": 20
+    },
+    {
+      "from": "imphal",
+      "to": "kohima",
+      "distance": 140,
+      "risk": 25,
+      "congestion": 18
+    },
+    {
+      "from": "imphal",
+      "to": "dimapur",
+      "distance": 70,
+      "risk": 20,
+      "congestion": 25
+    },
+    {
+      "from": "kohima",
+      "to": "dimapur",
+      "distance": 75,
+      "risk": 22,
+      "congestion": 22
+    },
+    {
+      "from": "aizawl",
+      "to": "agartala",
+      "distance": 150,
+      "risk": 18,
+      "congestion": 15
+    },
+    {
+      "from": "aizawl",
+      "to": "silchar",
+      "distance": 180,
+      "risk": 25,
+      "congestion": 20
+    },
+    {
+      "from": "itanagar",
+      "to": "dibrugarh",
+      "distance": 380,
+      "risk": 20,
+      "congestion": 15
+    },
+    {
+      "from": "gangtok",
+      "to": "siliguri",
+      "distance": 115,
+      "risk": 15,
+      "congestion": 25
+    },
+    {
+      "from": "gangtok",
+      "to": "guwahati",
+      "distance": 520,
+      "risk": 18,
+      "congestion": 20
+    },
+    {
+      "from": "dibrugarh",
+      "to": "dimapur",
+      "distance": 130,
+      "risk": 20,
+      "congestion": 18
+    },
+    {
+      "from": "silchar",
+      "to": "agartala",
+      "distance": 280,
+      "risk": 15,
+      "congestion": 20
+    },
+    {
+      "from": "siliguri",
+      "to": "dimapur",
+      "distance": 280,
+      "risk": 18,
+      "congestion": 22
+    },
+    {
+      "from": "shillong",
+      "to": "guwahati",
+      "distance": 100,
+      "risk": 15,
+      "congestion": 20
+    },
+    {
+      "from": "itanagar",
+      "to": "guwahati",
+      "distance": 320,
+      "risk": 25,
+      "congestion": 15
+    },
+    {
+      "from": "silchar",
+      "to": "guwahati",
+      "distance": 310,
+      "risk": 20,
+      "congestion": 25
+    },
+    {
+      "from": "dibrugarh",
+      "to": "guwahati",
+      "distance": 440,
+      "risk": 18,
+      "congestion": 20
+    },
+    {
+      "from": "siliguri",
+      "to": "guwahati",
+      "distance": 460,
+      "risk": 12,
+      "congestion": 30
+    },
+    {
+      "from": "silchar",
+      "to": "shillong",
+      "distance": 280,
+      "risk": 22,
+      "congestion": 18
+    },
+    {
+      "from": "aizawl",
+      "to": "shillong",
+      "distance": 350,
+      "risk": 28,
+      "congestion": 15
+    },
+    {
+      "from": "silchar",
+      "to": "imphal",
+      "distance": 180,
+      "risk": 30,
+      "congestion": 20
+    }
+  ]
+}

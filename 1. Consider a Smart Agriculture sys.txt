@@ -1,0 +1,67 @@
+1. Consider a Smart Agriculture system containing soil-moisture sensors, a Wi-Fi gateway, cloud storage, and a farmer's mobile application. Map each component to the appropriate layer of the IoT Reference Model.   
+
+Ans : 
+
+
+2. A smart home contains temperature sensors, a Wi-Fi router, a cloud platform, and a mobile application. Explain the flow of data through the IoT Reference Model.
+
+[Layer 1] Temperature Sensors
+
+       ↓ (Raw Analog/Digital Signals)
+
+[Layer 2] Wi-Fi Router
+
+       ↓ (Network Packets over IP)
+
+[Layer 3] Edge / Gateway Processing
+
+       ↓ (Filtered & Ingested Data Payload)
+
+[Layer 4] Cloud Database Storage
+
+       ↓ (Stored Records)
+
+[Layer 5] Data Abstraction & APIs
+
+       ↓ (Formatted JSON / Structured Data)
+
+[Layer 6] Mobile Application
+
+       ↓ (UI Visualizations & Alerts)
+
+[Layer 7] Homeowner / Business Logic
+
+
+
+3. In a smart healthcare system, wearable sensors collect a patient's heart rate and send it to a cloud platform. Explain the role of each IoT layer in this scenario.
+
+Ans : 
+
+
+4. A smart city uses sensors to monitor traffic. Explain how sensor data reaches a traffic-management application using the IoT Reference Model.
+
+5. A temperature sensor sends incorrect data to a cloud application. At which layers could the problem potentially occur? Explain.
+
+
+
+
+
+
+
+Ans 1 : 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

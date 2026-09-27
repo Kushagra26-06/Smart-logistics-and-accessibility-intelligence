@@ -1,0 +1,93 @@
+{
+  "current": {
+    "temperature": 28,
+    "humidity": 75,
+    "windSpeed": 12,
+    "windDirection": 45,
+    "precipitation": 5,
+    "pressure": 1013
+  },
+  "historicalPressure": [1015, 1014, 1013, 1012, 1011, 1010],
+  "districts": [
+    {
+      "name": "Guwahati",
+      "temp": 30,
+      "humidity": 72,
+      "wind": 10,
+      "precip": 3,
+      "pressure": 1012
+    },
+    {
+      "name": "Shillong",
+      "temp": 22,
+      "humidity": 85,
+      "wind": 15,
+      "precip": 8,
+      "pressure": 1010
+    },
+    {
+      "name": "Imphal",
+      "temp": 26,
+      "humidity": 78,
+      "wind": 12,
+      "precip": 5,
+      "pressure": 1011
+    },
+    {
+      "name": "Kohima",
+      "temp": 20,
+      "humidity": 88,
+      "wind": 18,
+      "precip": 12,
+      "pressure": 1008
+    },
+    {
+      "name": "Aizawl",
+      "temp": 24,
+      "humidity": 82,
+      "wind": 14,
+      "precip": 7,
+      "pressure": 1009
+    },
+    {
+      "name": "Agartala",
+      "temp": 29,
+      "humidity": 70,
+      "wind": 8,
+      "precip": 2,
+      "pressure": 1014
+    },
+    {
+      "name": "Itanagar",
+      "temp": 25,
+      "humidity": 80,
+      "wind": 11,
+      "precip": 4,
+      "pressure": 1011
+    },
+    {
+      "name": "Gangtok",
+      "temp": 18,
+      "humidity": 90,
+      "wind": 20,
+      "precip": 15,
+      "pressure": 1007
+    },
+    {
+      "name": "Dibrugarh",
+      "temp": 27,
+      "humidity": 76,
+      "wind": 9,
+      "precip": 3,
+      "pressure": 1013
+    },
+    {
+      "name": "Silchar",
+      "temp": 28,
+      "humidity": 74,
+      "wind": 10,
+      "precip": 4,
+      "pressure": 1012
+    }
+  ]
+}

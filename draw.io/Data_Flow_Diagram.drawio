@@ -1,0 +1,92 @@
+<mxfile host="app.diagrams.net" agent="Claude">
+  <diagram name="Data Flow Diagram - Level 1" id="dfd-diagram">
+    <mxGraphModel dx="1714" dy="811" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="d1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;" value="Weather API" vertex="1">
+          <mxGeometry height="50" width="180" x="40" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="d2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="1.0&#xa;Fetch &amp; Process&#xa;Weather Data" vertex="1">
+          <mxGeometry height="80" width="200" x="280" y="15" as="geometry" />
+        </mxCell>
+        <mxCell id="d3" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;boundedLbl=1;" value="D1: Weather&#xa;Data Store" vertex="1">
+          <mxGeometry height="55" width="190" x="550" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="d4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;" value="Field Officer" vertex="1">
+          <mxGeometry height="50" width="180" x="40" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="d5" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="2.0&#xa;Validate &amp; Store&#xa;Incident Reports" vertex="1">
+          <mxGeometry height="80" width="200" x="280" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="d6" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;boundedLbl=1;" value="D2: Incident&#xa;Reports Store" vertex="1">
+          <mxGeometry height="55" width="190" x="550" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="d7" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="3.0&#xa;Calculate Risk&#xa;Score" vertex="1">
+          <mxGeometry height="90" width="210" x="810" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="d8" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;boundedLbl=1;" value="D3: Route &amp;&#xa;Risk Data Store" vertex="1">
+          <mxGeometry height="55" width="200" x="815" y="395" as="geometry" />
+        </mxCell>
+        <mxCell id="d9" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="4.0&#xa;Compute Optimal&#xa;Route (Dijkstra)" vertex="1">
+          <mxGeometry height="80" width="210" x="550" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="d10" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="5.0&#xa;Generate &amp;&#xa;Send Alerts" vertex="1">
+          <mxGeometry height="80" width="210" x="810" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="d11" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="6.0&#xa;Generate&#xa;Analytics Report" vertex="1">
+          <mxGeometry height="80" width="210" x="1110" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="d12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;" value="District Admin /&#xa;User" vertex="1">
+          <mxGeometry height="60" width="190" x="815" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="de_d1_d2_0" edge="1" parent="1" source="d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" target="d2" value="Raw weather data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="de_d2_d3_1" edge="1" parent="1" source="d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" target="d3" value="Store readings">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="de_d3_d7_2" edge="1" parent="1" source="d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" target="d7" value="Weather data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="de_d4_d5_3" edge="1" parent="1" source="d4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" target="d5" value="Incident report (GPS + photo)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="de_d5_d6_4" edge="1" parent="1" source="d5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" target="d6" value="Store incident">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="de_d6_d7_5" edge="1" parent="1" source="d6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" target="d7" value="Incident data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="de_d7_d8_6" edge="1" parent="1" source="d7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" target="d8" value="Updated risk scores">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="de_d8_d9_7" edge="1" parent="1" source="d8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" target="d9" value="Risk-weighted graph">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="de_d8_d10_8" edge="1" parent="1" source="d8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" target="d10" value="High-risk routes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="de_d8_d11_9" edge="1" parent="1" source="d8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" target="d11" value="Historical data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="de_d10_d12_11" edge="1" parent="1" source="d10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" target="d12" value="Alert notification">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rmFMKqIt30GFY04GiR53-1" edge="1" parent="1" source="d9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="d12" value="Optimal route">
+          <mxGeometry relative="1" x="-0.3418" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="600" y="750" as="sourcePoint" />
+            <mxPoint x="835" y="910" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rmFMKqIt30GFY04GiR53-2" edge="1" parent="1" source="d11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="d12" value="Analytics report">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1450" y="730" as="sourcePoint" />
+            <mxPoint x="1250" y="940" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

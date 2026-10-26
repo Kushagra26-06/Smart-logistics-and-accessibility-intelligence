@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Logistics & Accessibility Intelligence Platform - NER</title>
     
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Google Maps API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIDDqOPxQeKBgPhXpAsjrXtfqEbNi4eFU&callback=initMap"></script>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -796,72 +796,7 @@
             color: #a0a0a0;
         }
 
-        /* Navigation Dropdown */
-        .nav-dropdown {
-            position: relative;
-        }
 
-        .nav-dropdown-menu {
-            position: absolute;
-            top: calc(100% + 8px);
-            left: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            min-width: 180px;
-            overflow: hidden;
-            display: none;
-            z-index: 1000;
-        }
-
-        .nav-dropdown-menu.active {
-            display: block;
-            animation: fadeIn 0.2s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        body.dark-mode .nav-dropdown-menu {
-            background: #16213e;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .nav-dropdown-item {
-            padding: 12px 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: background-color 0.2s;
-            color: #1a1a1a;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .nav-dropdown-item:hover {
-            background-color: #f0f2f5;
-        }
-
-        body.dark-mode .nav-dropdown-item {
-            color: #e0e0e0;
-        }
-
-        body.dark-mode .nav-dropdown-item:hover {
-            background-color: #1e2a4a;
-        }
-
-        .dropdown-icon {
-            font-size: 18px;
-        }
 
         /* Route Finder Form under map */
         .route-finder-panel {
@@ -1336,6 +1271,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
+            gap: 12px;
         }
 
         .incident-type {
@@ -1365,6 +1301,10 @@
 
         body.dark-mode .incident-location {
             color: #e0e0e0;
+        }
+
+        body.dark-mode .incident-location + div {
+            color: #a0a0a0;
         }
 
         .incident-severity {
@@ -1478,19 +1418,6 @@
                 <li><a href="#" data-tab="weather-monitoring">Weather Monitoring</a></li>
                 <li><a href="#" data-tab="incident-reports">Incident Reports</a></li>
                 <li><a href="#">AI Predictions</a></li>
-                <li class="nav-dropdown">
-                    <a href="#" id="settings-nav-btn">Settings ▼</a>
-                    <div class="nav-dropdown-menu" id="nav-settings-dropdown">
-                        <div class="nav-dropdown-item" id="nav-light-mode-btn">
-                            <span class="dropdown-icon">☀️</span>
-                            <span>Light Mode</span>
-                        </div>
-                        <div class="nav-dropdown-item" id="nav-dark-mode-btn">
-                            <span class="dropdown-icon">🌙</span>
-                            <span>Dark Mode</span>
-                        </div>
-                    </div>
-                </li>
             </ul>
         </nav>
 
@@ -1822,7 +1749,7 @@
                     </div>
                     <div class="form-group">
                         <label for="location">Location (GPS Coordinates)</label>
-                        <input type="text" id="location" placeholder="Auto-captured or enter manually" required>
+                        <input type="text" id="location" placeholder="Enter coordinates manually (e.g., 26.1445, 91.7362)" required>
                     </div>
                     <div class="form-group">
                         <label for="description">Incident Description</label>
@@ -1850,9 +1777,6 @@
         </div>
     </div>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
     <!-- Chart.js for Risk Trend Graph -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
@@ -1863,16 +1787,46 @@
             routes: [],
             incidents: [],
             weatherData: null,
-            selectedRoute: null
+            selectedRoute: null,
+            map: null,
+            polylines: [],
+            markers: []
         };
 
-        // Initialize the map
-        const map = L.map('map').setView([26.0, 93.0], 6); // Centered on NER
+        // Initialize Google Map (called by Google Maps API callback)
+        function initMap() {
+            appState.map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 26.0, lng: 93.0 },
+                zoom: 6,
+                scrollwheel: true,
+                gestureHandling: 'greedy',
+                disableDefaultUI: false,
+                zoomControl: true,
+                styles: [
+                    {
+                        featureType: 'all',
+                        elementType: 'geometry',
+                        stylers: [{ saturation: -20 }]
+                    }
+                ]
+            });
 
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+            // Initialize map features immediately after map is ready
+            drawRoutes();
+            updateRouteList();
+            updateStatusCounts();
+            updateWeatherData();
+            updateTimestamp();
+
+            // Simulate real-time updates
+            setInterval(() => {
+                updateWeatherData();
+            }, 30000);
+
+            setInterval(() => {
+                updateRouteStatuses();
+            }, 60000);
+        }
 
         // Enhanced route data for NER with AI analysis data
         const sampleRoutes = [
@@ -2009,43 +1963,52 @@
 
         // Draw routes on map
         function drawRoutes() {
-            // Clear existing layers
-            map.eachLayer((layer) => {
-                if (layer instanceof L.Polyline) {
-                    map.removeLayer(layer);
-                }
-            });
+            // Clear existing polylines and markers
+            appState.polylines.forEach(polyline => polyline.setMap(null));
+            appState.markers.forEach(marker => marker.setMap(null));
+            appState.polylines = [];
+            appState.markers = [];
 
             sampleRoutes.forEach(route => {
-                const polyline = L.polyline(route.coordinates, {
-                    color: getStatusColor(route.status),
-                    weight: 6,
-                    opacity: 0.9
-                }).addTo(map);
+                const path = route.coordinates.map(coord => ({ lat: coord[0], lng: coord[1] }));
 
-                // Add popup with enhanced information
-                polyline.bindPopup(`
-                    <div style="font-family: Arial, sans-serif; min-width: 250px;">
-                        <h3 style="color: #003366; margin: 0 0 10px 0; font-size: 14px;">${route.name}</h3>
-                        <div style="margin-bottom: 8px;">
-                            <strong>Status:</strong> <span style="color: ${getStatusColor(route.status)}; font-weight: bold;">${route.status.toUpperCase()}</span>
+                const polyline = new google.maps.Polyline({
+                    path: path,
+                    geodesic: true,
+                    strokeColor: getStatusColor(route.status),
+                    strokeOpacity: 0.9,
+                    strokeWeight: 6,
+                    map: appState.map
+                });
+
+                appState.polylines.push(polyline);
+
+                // Add info window with enhanced information
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div style="font-family: Arial, sans-serif; min-width: 250px; padding: 10px;">
+                            <h3 style="color: #003366; margin: 0 0 10px 0; font-size: 14px;">${route.name}</h3>
+                            <div style="margin-bottom: 8px;">
+                                <strong>Status:</strong> <span style="color: ${getStatusColor(route.status)}; font-weight: bold;">${route.status.toUpperCase()}</span>
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                <strong>Risk Score:</strong> ${route.riskScore}%
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                <strong>Distance:</strong> ${route.distance} km
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <strong>Normal Travel Time:</strong> ${Math.floor(route.normalTime / 60)}h ${route.normalTime % 60}m
+                            </div>
+                            <button onclick="showAlternateRoute(${route.id})" style="width: 100%; padding: 8px 12px; background: linear-gradient(135deg, #003366, #004080); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 12px;">🤖 View AI Analysis</button>
                         </div>
-                        <div style="margin-bottom: 8px;">
-                            <strong>Risk Score:</strong> ${route.riskScore}%
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <strong>Distance:</strong> ${route.distance} km
-                        </div>
-                        <div style="margin-bottom: 12px;">
-                            <strong>Normal Travel Time:</strong> ${Math.floor(route.normalTime / 60)}h ${route.normalTime % 60}m
-                        </div>
-                        <button onclick="showAlternateRoute(${route.id})" style="width: 100%; padding: 8px 12px; background: linear-gradient(135deg, #003366, #004080); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 12px;">🤖 View AI Analysis</button>
-                    </div>
-                `);
+                    `
+                });
 
                 // Click handler
-                polyline.on('click', () => {
+                polyline.addListener('click', () => {
                     selectRoute(route);
+                    infoWindow.open(appState.map, polyline.getPath().getAt(0));
                 });
             });
         }
@@ -2258,77 +2221,15 @@
             updateTimestamp();
         }
 
-        // Get current location
-        function getCurrentLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude.toFixed(4);
-                        const lng = position.coords.longitude.toFixed(4);
-                        document.getElementById('location').value = `${lat}, ${lng}`;
-                    },
-                    (error) => {
-                        console.log('Geolocation error:', error);
-                        document.getElementById('location').placeholder = 'Location capture failed - enter coordinates manually';
-                    }
-                );
-            } else {
-                document.getElementById('location').placeholder = 'Geolocation not supported - enter coordinates manually';
-            }
-        }
 
-        // Handle incident form submission
-        document.getElementById('incident-form').addEventListener('submit', function(e) {
-            e.preventDefault();
 
-            const incident = {
-                type: document.getElementById('incident-type').value,
-                location: document.getElementById('location').value,
-                description: document.getElementById('description').value,
-                severity: document.getElementById('severity').value,
-                timestamp: new Date().toISOString()
-            };
 
-            appState.incidents.push(incident);
-
-            // Show success message
-            alert('Incident reported successfully! The AI system will analyze the impact and update route recommendations accordingly.');
-
-            // Reset form
-            this.reset();
-
-            // Trigger route re-evaluation based on incident severity
-            if (incident.severity === 'high' || incident.severity === 'critical') {
-                showAlert('high-risk', `Critical incident reported: ${incident.type} at ${incident.location}. AI route re-calculation initiated.`);
-                updateRouteStatuses();
-            }
-        });
-
-        // Initialize geolocation on page load
-        window.addEventListener('load', () => {
-            getCurrentLocation();
-            
-            // Initial data load
-            drawRoutes();
-            updateRouteList();
-            updateStatusCounts();
-            updateWeatherData();
-            updateTimestamp();
-
-            // Simulate real-time updates
-            setInterval(() => {
-                updateWeatherData();
-            }, 30000); // Weather updates every 30 seconds
-
-            setInterval(() => {
-                updateRouteStatuses();
-            }, 60000); // Route status updates every minute
-        });
 
         // Make functions globally available
         window.selectRoute = selectRoute;
         window.showAlternateRoute = showAlternateRoute;
         window.sampleRoutes = sampleRoutes;
+        window.deleteIncident = deleteIncident;
 
         // Dijkstra's Algorithm Implementation for Optimal Route Finding
         
@@ -2482,51 +2383,58 @@
         }
 
         // Draw optimal path on map
-        let optimalPathLayer = null;
+        let optimalPathPolyline = null;
+        let optimalPathMarkers = [];
 
         function drawOptimalPath(pathResult) {
             // Remove previous optimal path
-            if (optimalPathLayer) {
-                map.removeLayer(optimalPathLayer);
+            if (optimalPathPolyline) {
+                optimalPathPolyline.setMap(null);
             }
-            
+            optimalPathMarkers.forEach(marker => marker.setMap(null));
+            optimalPathMarkers = [];
+
             if (!pathResult) return;
-            
+
             const coordinates = pathResult.path.map(nodeId => {
                 const node = nerGraph.nodes[nodeId];
-                return [node.lat, node.lng];
+                return { lat: node.lat, lng: node.lng };
             });
-            
+
             // Draw the optimal path with distinctive style
-            optimalPathLayer = L.polyline(coordinates, {
-                color: '#ff6b6b',
-                weight: 8,
-                opacity: 0.9,
-                dashArray: '10, 10'
-            }).addTo(map);
-            
+            optimalPathPolyline = new google.maps.Polyline({
+                path: coordinates,
+                geodesic: true,
+                strokeColor: '#ff6b6b',
+                strokeOpacity: 0.9,
+                strokeWeight: 8,
+                map: appState.map
+            });
+
             // Add markers for start and end
             const startNode = nerGraph.nodes[pathResult.path[0]];
             const endNode = nerGraph.nodes[pathResult.path[pathResult.path.length - 1]];
-            
-            L.marker([startNode.lat, startNode.lng], {
-                icon: L.divIcon({
-                    className: 'start-marker',
-                    html: '🚀',
-                    iconSize: [30, 30]
-                })
-            }).addTo(map).bindPopup(`Start: ${startNode.name}`);
-            
-            L.marker([endNode.lat, endNode.lng], {
-                icon: L.divIcon({
-                    className: 'end-marker',
-                    html: '🎯',
-                    iconSize: [30, 30]
-                })
-            }).addTo(map).bindPopup(`End: ${endNode.name}`);
-            
+
+            const startMarker = new google.maps.Marker({
+                position: { lat: startNode.lat, lng: startNode.lng },
+                map: appState.map,
+                title: `Start: ${startNode.name}`,
+                label: '🚀'
+            });
+            optimalPathMarkers.push(startMarker);
+
+            const endMarker = new google.maps.Marker({
+                position: { lat: endNode.lat, lng: endNode.lng },
+                map: appState.map,
+                title: `End: ${endNode.name}`,
+                label: '🎯'
+            });
+            optimalPathMarkers.push(endMarker);
+
             // Fit map to show the entire path
-            map.fitBounds(optimalPathLayer.getBounds(), { padding: [50, 50] });
+            const bounds = new google.maps.LatLngBounds();
+            coordinates.forEach(coord => bounds.extend(coord));
+            appState.map.fitBounds(bounds);
         }
 
         // Find optimal route button handler
@@ -3017,12 +2925,18 @@
                     <div class="incident-card-header">
                         <span class="incident-type">${report.incidentType.charAt(0).toUpperCase() + report.incidentType.slice(1)}</span>
                         <span class="incident-date">${formattedDate}</span>
+                        <button onclick="deleteIncident(${report.id}, event)" style="background: none; border: none; cursor: pointer; font-size: 18px; padding: 4px; color: #ef4444;">🗑️</button>
                     </div>
                     <div class="incident-location">📍 ${report.location}</div>
+                    <div style="font-size: 13px; color: #666; margin-top: 4px;">${report.description.substring(0, 100)}${report.description.length > 100 ? '...' : ''}</div>
                     <span class="incident-severity ${severityClass}">${severityLabel}</span>
                 `;
 
-                card.addEventListener('click', () => showIncidentDetail(report.id));
+                card.addEventListener('click', (e) => {
+                    if (!e.target.closest('button')) {
+                        showIncidentDetail(report.id);
+                    }
+                });
                 list.appendChild(card);
             });
         }
@@ -3030,7 +2944,7 @@
         function showIncidentDetail(reportId) {
             const reports = getIncidentReports();
             const report = reports.find(r => r.id === reportId);
-            
+
             if (!report) return;
 
             // Hide list view, show detail view
@@ -3039,9 +2953,9 @@
             detailView.style.display = 'block';
 
             const date = new Date(report.timestamp);
-            const formattedDate = date.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
+            const formattedDate = date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
                 day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit'
@@ -3076,8 +2990,32 @@
                         <span class="detail-label">Report ID</span>
                         <span class="detail-value">#${report.id}</span>
                     </div>
+                    <div style="margin-top: 20px;">
+                        <button onclick="deleteIncident(${report.id})" style="padding: 10px 20px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">🗑️ Delete Report</button>
+                    </div>
                 </div>
             `;
+        }
+
+        // Delete incident function
+        function deleteIncident(reportId, event) {
+            if (event) {
+                event.stopPropagation();
+            }
+
+            const reports = getIncidentReports();
+            const updatedReports = reports.filter(r => r.id !== reportId);
+            localStorage.setItem('incidentReports', JSON.stringify(updatedReports));
+
+            // Reload the list if in list view
+            if (document.getElementById('incident-reports-list').parentElement.style.display !== 'none') {
+                loadIncidentReports();
+            } else {
+                // If in detail view, go back to list
+                document.getElementById('incident-detail-view').style.display = 'none';
+                document.getElementById('incident-reports-list').parentElement.style.display = 'block';
+                loadIncidentReports();
+            }
         }
 
         // Back to list button handler
@@ -3089,7 +3027,7 @@
         // Update incident form to save to localStorage
         document.getElementById('incident-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const report = {
                 incidentType: document.getElementById('incident-type').value,
                 location: document.getElementById('location').value,
@@ -3097,67 +3035,24 @@
                 severity: document.getElementById('severity').value
             };
 
+            if (!report.incidentType || !report.location || !report.description || !report.severity) {
+                alert('Please fill in all fields');
+                return;
+            }
+
             saveIncidentReport(report);
-            
+
             // Reset form
             this.reset();
-            
-            // Show success message
-            alert('Incident report submitted successfully!');
-            
+
             // If on incident reports tab, reload the list
             if (document.getElementById('incident-reports-tab').classList.contains('active')) {
                 loadIncidentReports();
             }
         });
 
-        // Navigation Settings Dropdown and Theme Toggle Functionality
-        const settingsNavBtn = document.getElementById('settings-nav-btn');
-        const navSettingsDropdown = document.getElementById('nav-settings-dropdown');
-        const navLightModeBtn = document.getElementById('nav-light-mode-btn');
-        const navDarkModeBtn = document.getElementById('nav-dark-mode-btn');
-        const body = document.body;
-
-        // Check for saved theme preference or default to light mode
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            body.classList.add('dark-mode');
-        }
-
-        // Toggle navigation settings dropdown
-        settingsNavBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            navSettingsDropdown.classList.toggle('active');
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!navSettingsDropdown.contains(e.target) && !settingsNavBtn.contains(e.target)) {
-                navSettingsDropdown.classList.remove('active');
-            }
-        });
-
-        // Set theme function
-        function setTheme(theme) {
-            if (theme === 'dark') {
-                body.classList.add('dark-mode');
-            } else {
-                body.classList.remove('dark-mode');
-            }
-            localStorage.setItem('theme', theme);
-            navSettingsDropdown.classList.remove('active');
-        }
-
-        // Light mode button click handler
-        navLightModeBtn.addEventListener('click', () => {
-            setTheme('light');
-        });
-
-        // Dark mode button click handler
-        navDarkModeBtn.addEventListener('click', () => {
-            setTheme('dark');
-        });
+        // Dark mode is always active
+        document.body.classList.add('dark-mode');
     </script>
 </body>
 </html>

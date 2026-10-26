@@ -4,7 +4,7 @@ A comprehensive AI-powered route monitoring and risk assessment system for North
 
 ## Overview
 
-This platform provides real-time intelligence for logistics operations in the challenging terrain of North East India. It combines live weather data, field incident reports, and historical disruption records to calculate optimal routes, predict disruptions, and ensure safe transportation.
+This platform provides real-time intelligence for logistics operations in the challenging terrain of North East India. It combines simulated weather data, field incident reports, and historical disruption records to calculate optimal routes, predict disruptions, and ensure safe transportation.
 
 ## Technical Approach
 
@@ -13,9 +13,9 @@ The system follows a **data-in → intelligence → action-out** pipeline. Inste
 ### Core Methodology (3 Stages)
 
 #### Stage 1 — Data Collection
-Continuously gather live inputs from three sources:
-- **Weather API** (temperature, humidity, wind, precipitation, pressure)
-- **Field officer reports** (geo-tagged incidents, photos)
+Continuously gather inputs from three sources:
+- **Simulated Weather Data** (temperature, humidity, wind, precipitation, pressure)
+- **Field officer reports** (manually entered GPS coordinates, incident details)
 - **Historical/seeded disruption records**
 
 #### Stage 2 — Intelligence Processing
@@ -47,8 +47,8 @@ Results are displayed on a GIS dashboard with:
 The system is structured in 4 layers, each with clear responsibilities:
 
 ### Layer 1: Data Layer (Inputs)
-- **Weather API** (OpenWeatherMap integration)
-- **Field incident reports** (submitted via web form)
+- **Simulated Weather Data** (for prototype demonstration)
+- **Field incident reports** (submitted via web form with manual GPS entry)
 - **Historical/seeded route disruption data**
 
 ### Layer 2: Processing Layer (The "Brain")
@@ -56,7 +56,7 @@ The system is structured in 4 layers, each with clear responsibilities:
 - **Dijkstra Route Optimizer** — computes optimal paths using current risk-weighted graph
 
 ### Layer 3: Storage Layer
-- **localStorage** (prototype) — stores: live weather readings, route risk scores, incident reports, historical logs
+- **localStorage** — stores: incident reports, route risk scores, historical logs
 - **Future**: Firebase/MongoDB for production deployment
 
 ### Layer 4: Presentation Layer (What Users See)
@@ -64,76 +64,108 @@ The system is structured in 4 layers, each with clear responsibilities:
 - **Route Analytics** — historical trends and reliability rankings
 - **Weather Monitoring** — live district weather cards
 - **Incident Reports** — field report feed and submission form
-- **Settings** — user preferences, language, role switching
 
 ## Features
 
 ### 1. Interactive Route Map
-- Live GIS map of NER districts with route visualization
-- Color-coded routes based on current risk levels
-- Real-time weather overlay
-- District markers with connectivity visualization
+- Live GIS map of NER districts with route visualization using Google Maps
+- Color-coded routes based on current risk levels (Green: Clear, Yellow: At Risk, Red: Blocked)
+- Scroll-to-zoom functionality (no Ctrl key required)
+- Immediate route rendering on page load (no blank map)
+- Click on routes to view detailed information and AI analysis
 
 ### 2. AI-Powered Route Intelligence
-- **Optimal Route Finder**: Select start/end districts, get the safest + shortest path
+- **Optimal Route Finder**: Select start/end districts from dropdown, get the safest + shortest path using Dijkstra's algorithm
 - **Disruption Simulation**: Simulate risk spikes to see alternative routes
 - **Dynamic Route Optimization**: Routes update based on real-time conditions
 - **Weighted Decision Making**: Balances distance, risk, and congestion
+- **Visual Path Display**: Optimal paths shown with distinctive dashed red line with start/end markers
 
-### 3. Route Analytics
-- **Reliability Rankings**: Historical uptime percentage for all routes
-- **Disruption Leaderboard**: Routes with most incidents in last 30 days
-- **Risk Trend Analysis**: 30-day risk score visualization with Chart.js
+### 3. Route Analytics Tab
+- **Reliability Rankings Table**: Historical uptime percentage for all routes with trend indicators
+- **Disruption Leaderboard**: Routes with most incidents in last 30 days, ranked by frequency
+- **Risk Trend Analysis**: Interactive 30-day risk score visualization using Chart.js
 - **Pattern Recognition**: Identify seasonal and weather-based risk patterns
+- **Route Selector**: Choose specific routes to view their risk trends over time
 
-### 4. Weather Monitoring
+### 4. Weather Monitoring Tab
 - **5 Key Metrics** with route risk relevance:
-  - Temperature (road surface risk indicator)
-  - Humidity (pre-monsoon storm indicator)
-  - Wind Speed & Direction (storm movement tracker)
-  - Precipitation (#1 Risk Driver - landslide/flood correlation)
-  - Barometric Pressure (predictive storm indicator)
-- **District Weather Grid**: Real-time conditions across all 10 NER districts
-- **Color-coded Risk Levels**: Green (normal), Yellow (elevated), Red (high)
-- **Predictive Warnings**: Storm alerts based on pressure trends
+  - **Temperature** (road surface risk indicator) - shows current temp with emoji icon and risk explanation
+  - **Humidity** (pre-monsoon storm indicator) - predicts storm buildup before rainfall
+  - **Wind Speed & Direction** (storm movement tracker) - animated wind arrow showing direction
+  - **Precipitation** (#1 Risk Driver - landslide/flood correlation) - color-coded status (Green/Yellow/Red)
+  - **Barometric Pressure** (predictive storm indicator) - shows trend and warning alerts
+- **District Weather Grid**: Real-time conditions across all 10 NER districts with color-coded risk levels
+- **Predictive Warnings**: Storm alerts based on pressure trends (pressure dropping rapidly)
+- **Auto-refresh**: Weather data updates every 30 seconds
 
-### 5. Incident Reports
-- **Field Report Submission**: Geo-tagged incident reporting
+### 5. Incident Reports Tab
+- **Field Report Submission**: Manual GPS coordinate entry for incident location
 - **Incident Types**: Landslide, Flood, Road Damage, Traffic Congestion, Bridge Issues
-- **Severity Levels**: Low, Medium, High, Critical
-- **Report Management**: View, delete, and manage all submitted reports
+- **Severity Levels**: Low, Medium, High, Critical with color-coded badges
+- **Report List View**: Shows all submitted reports with type, location, date, severity, and description preview
+- **Report Detail View**: Click any report to view full details including all fields
+- **Delete Functionality**: Delete reports from both list view and detail view with 🗑️ icon/button
 - **Persistent Storage**: Reports saved to localStorage database
+- **No Location Permission Prompts**: Manual entry only, no automatic GPS requests
 
-### 6. User Interface
-- **Dark/Light Mode**: Theme switching with localStorage persistence
+### 6. Dashboard Tab
+- **Route Status Overview**: Real-time counts of Clear, At Risk, and Blocked routes
+- **Weather Conditions Panel**: Live temperature, humidity, wind speed, and rainfall data
+- **Alerts & Notifications**: High-risk alerts based on weather conditions (e.g., heavy rainfall warnings)
+- **Route Status List**: Clickable list of all routes with their current status and risk scores
+- **Optimal Route Finder Form**: Integrated route finding tool under the map
+- **Field Incident Report Form**: Submit new incidents directly from dashboard
+
+### 7. User Interface
+- **Dark Mode Only**: Optimized dark theme for better visibility and reduced eye strain
 - **Responsive Design**: Works on desktop and tablet screens
 - **Tab Navigation**: Easy switching between Dashboard, Route Analytics, Weather Monitoring, and Incident Reports
-- **Real-time Updates**: Weather data refreshes every 30 seconds
+- **Real-time Updates**: Weather data refreshes every 30 seconds, route status updates every 60 seconds
+- **Clean, Modern Design**: Professional gradient styling with intuitive color coding
 
 ## Setup Instructions
 
 ### Prerequisites
 - Modern web browser (Chrome, Firefox, Safari, Edge)
+- Google Maps API Key (required for map functionality)
 - No server required — runs entirely in the browser
 
 ### Installation
 1. Clone or download the project files
-2. Open `index.html` in a web browser
-3. The application will load immediately
+2. Ensure you have a valid Google Maps API key
+3. Open `index.html` in a web browser
+4. The application will load immediately with the map and all features
+
+### Google Maps API Key
+The project uses Google Maps for route visualization. A valid API key is required and is included in the code. To use your own API key:
+1. Get a Google Maps JavaScript API key from [Google Cloud Console](https://console.cloud.google.com/)
+2. Replace the existing API key in the code (line in the script tag)
+3. Ensure the API key has Maps JavaScript API enabled
 
 ### First-Time Use
-1. **Dashboard**: View the interactive map with NER districts and routes
-2. **Route Intelligence**: 
-   - Select start and end districts from dropdowns
-   - Click "🔍 Find Optimal Route" to see the best path
-   - Click "⚡ Simulate Disruption" to see alternative routes
-3. **Route Analytics**: Click the tab to view historical reliability and disruption data
-4. **Weather Monitoring**: Click the tab to see real-time weather conditions
-5. **Incident Reports**: 
-   - Submit a new report using the form on Dashboard
-   - Click "Incident Reports" tab to view all submitted reports
+1. **Dashboard**: View the interactive map with NER districts and routes. All routes load immediately on startup.
+2. **Route Intelligence**:
+   - Select start and end districts from the dropdowns under the map
+   - Click "🔍 Find Optimal Route" to see the best path displayed on the map
+   - View results showing total distance, risk score, estimated time, and path
+   - Click "⚡ Simulate Disruption" to see alternative routes under high-risk conditions
+3. **Route Analytics Tab**: Click the tab to view:
+   - Reliability rankings table with historical uptime percentages
+   - Disruption leaderboard showing most problematic routes
+   - Interactive risk trend charts for selected routes
+4. **Weather Monitoring Tab**: Click the tab to view:
+   - Central monitoring station metrics (Guwahati)
+   - District weather grid with color-coded risk levels
+   - Predictive warnings based on pressure trends
+5. **Incident Reports Tab**: Click the tab to:
+   - View all submitted incident reports in a list
    - Click any report to view full details
-   - Delete reports using the delete button
+   - Delete reports using the 🗑️ icon (list view) or "Delete Report" button (detail view)
+6. **Submit Incident Report**:
+   - Use the form on the Dashboard tab
+   - Select incident type, enter GPS coordinates manually, describe the incident, and set severity
+   - Click submit to save the report (no success alert, just saves to localStorage)
 
 ## NER Districts Covered
 
@@ -163,38 +195,82 @@ Where:
 - **Congestion**: Current traffic conditions
 
 ### Weather Impact on Risk
- precipitation > 30mm/hr: +50 to risk score
- precipitation 10-30mm/hr: +25 to risk score
- Humidity > 80% + rising temp: +15 to risk score
- Pressure dropping > 3hPa/3hr: +20 to risk score
- Wind speed > 30km/h: +10 to risk score
+- Precipitation > 30mm/hr: +50 to risk score
+- Precipitation 10-30mm/hr: +25 to risk score
+- Humidity > 80% + rising temp: +15 to risk score
+- Pressure dropping > 3hPa/3hr: +20 to risk score
+- Wind speed > 30km/h: +10 to risk score
 
 ## Technology Stack
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Mapping**: Leaflet.js for interactive GIS maps
+- **Mapping**: Google Maps JavaScript API for interactive GIS maps
 - **Charts**: Chart.js for data visualization
-- **Storage**: localStorage (prototype), Firebase/MongoDB (production)
-- **Weather**: OpenWeatherMap API (ready for integration)
-- **Algorithm**: Dijkstra's shortest path algorithm
+- **Storage**: localStorage for prototype data persistence
+- **Algorithm**: Dijkstra's shortest path algorithm for route optimization
+- **Weather**: Simulated weather data (ready for OpenWeatherMap API integration)
+
+## Tab-by-Tab Feature Guide
+
+### Dashboard Tab
+The main interface featuring:
+- **Interactive Map**: Google Maps showing all NER routes with color-coded risk levels
+- **Route Status Cards**: Three cards showing real-time counts of Clear, At Risk, and Blocked routes
+- **Weather Panel**: Live weather conditions for the NER region
+- **Alerts Box**: High-risk alerts based on weather conditions
+- **Route List**: Clickable list of all routes with status badges
+- **Optimal Route Finder**: Tool to find the best path between any two districts
+- **Incident Report Form**: Submit new field reports
+
+### Route Analytics Tab
+Historical analysis and trends:
+- **Reliability Table**: Shows route reliability rankings with percentage uptime and trend indicators (Improving/Declining/Stable)
+- **Disruption Leaderboard**: Top 5 most disrupted routes with incident counts
+- **Risk Trend Chart**: Interactive line chart showing 30-day risk history for selected routes
+- **Route Selector**: Dropdown to choose which route's trend to visualize
+
+### Weather Monitoring Tab
+Real-time weather intelligence:
+- **Central Station Metrics**: Detailed breakdown of 5 key weather metrics with risk explanations
+- **District Weather Grid**: Cards for each of 10 districts showing current conditions
+- **Color-Coded Risk**: Green (low risk), Yellow (medium risk), Red (high risk) based on precipitation
+- **Predictive Alerts**: Pressure trend warnings for approaching storms
+
+### Incident Reports Tab
+Field report management:
+- **Report List**: All submitted reports with type, location, date, severity, and description preview
+- **Detail View**: Full report details when clicking on a report
+- **Delete Function**: Remove reports with 🗑️ icon or "Delete Report" button
+- **Persistent Storage**: All reports saved to browser localStorage
+
+## Key Improvements from Initial Version
+
+1. **Google Maps Integration**: Replaced Leaflet/OpenStreetMap with Google Maps for better reliability and performance
+2. **Dark Mode Only**: Removed light mode for a consistent, optimized dark theme
+3. **Manual GPS Entry**: Removed automatic location requests to eliminate permission prompts
+4. **Delete Functionality**: Added ability to delete incident reports
+5. **Fixed Data Display**: Corrected incident report field display issues
+6. **Improved Map UX**: Enabled scroll-to-zoom without Ctrl key, fixed blank map on startup
+7. **Removed Settings Tab**: Simplified navigation by removing theme settings
 
 ## Future Enhancements
 
 ### Planned Features
-- **Real-time Weather API Integration**: Connect to OpenWeatherMap for live data
-- **Firebase Integration**: Cloud database for multi-user support
-- **Mobile App**: React Native mobile application
-- **Push Notifications**: Real-time alerts for route disruptions
+- **Real-time Weather API Integration**: Connect to OpenWeatherMap for live weather data
+- **Firebase Integration**: Cloud database for multi-user support and data persistence
+- **Mobile App**: React Native mobile application for field officers
+- **Push Notifications**: Real-time alerts for route disruptions to mobile devices
 - **ML Model**: Train on historical data for predictive analytics
 - **User Authentication**: Role-based access (admin, field officer, logistics manager)
 - **Photo Upload**: Attach photos to incident reports
-- **GPS Integration**: Auto-capture location for incident reports
+- **GPS Auto-Capture**: Optional automatic GPS location capture with user permission
 
 ### Scalability
 - Add more NER districts and routes
 - Integrate with national highway databases
 - Connect to state transportation APIs
 - Multi-region support (beyond NER)
+- Real-time data synchronization across devices
 
 ## License
 
@@ -206,6 +282,6 @@ For questions or feedback about this platform, please contact the development te
 
 ---
 
-**Version**: 1.0.0 (Prototype)
-**Last Updated**: September 2026
+**Version**: 1.1.0 (Prototype with Google Maps)
+**Last Updated**: October 2026
 **Status**: Development Prototype

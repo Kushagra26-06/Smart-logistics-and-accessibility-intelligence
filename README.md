@@ -139,7 +139,7 @@ The system is structured in 4 layers, each with clear responsibilities:
 
 ### Google Maps API Key
 The project uses Google Maps for route visualization. A valid API key is required and is included in the code. To use your own API key:
-1. Get a Google Maps JavaScript API key from [Google Cloud Console](https://console.cloud.google.com/)
+1. Get a Google Maps JavaScript API key .
 2. Replace the existing API key in the code (line in the script tag)
 3. Ensure the API key has Maps JavaScript API enabled
 

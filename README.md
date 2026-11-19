@@ -1,8 +1,5 @@
 # Smart Logistics & Accessibility Intelligence Platform
 
-A comprehensive AI-powered route monitoring and risk assessment system for North East India (NER) logistics operations.
-
----
 
 A comprehensive AI-powered route monitoring and risk assessment system for North East India (NER) logistics operations.
 

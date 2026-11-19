@@ -1,26 +1,6 @@
-<div align="center">
+# Smart Logistics & Accessibility Intelligence Platform
 
-# 🚚 **Smart Logistics & Accessibility Intelligence Platform** 🗺️
-
-### 🌍 AI-Powered Route Monitoring for North East India
-
-![Platform Status](https://img.shields.io/badge/status-Development%20Prototype-orange)
-![Version](https://img.shields.io/badge/version-1.1.0-blue)
-![License](https://img.shields.io/badge/license-Prototype-green)
-
-</div>
-
----
-
-> 💡 **Transforming Logistics in North East India with Real-Time Intelligence**
-
----
-
-<div align="center">
-
-**A comprehensive AI-powered route monitoring and risk assessment system for North East India (NER) logistics operations.**
-
-</div>
+A comprehensive AI-powered route monitoring and risk assessment system for North East India (NER) logistics operations.
 
 ---
 

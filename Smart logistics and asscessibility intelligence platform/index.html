@@ -6,7 +6,7 @@
     <title>Smart Logistics & Accessibility Intelligence Platform - NER</title>
     
     <!-- Google Maps API -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIDDqOPxQeKBgPhXpAsjrXtfqEbNi4eFU&callback=initMap"></script>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -2746,13 +2746,34 @@
         function initializeWeatherMonitoring() {
             updateWeatherMetrics();
             updateDistrictWeatherGrid();
-            
+
             // Simulate real-time updates every 30 seconds
             setInterval(() => {
                 simulateWeatherChanges();
                 updateWeatherMetrics();
                 updateDistrictWeatherGrid();
             }, 30000);
+        }
+
+        function simulateWeatherChanges() {
+            // Randomly fluctuate weather values
+            weatherData.current.temperature += (Math.random() - 0.5) * 2;
+            weatherData.current.humidity += (Math.random() - 0.5) * 5;
+            weatherData.current.windSpeed += (Math.random() - 0.5) * 3;
+            weatherData.current.windDirection += (Math.random() - 0.5) * 20;
+            weatherData.current.precipitation = Math.max(0, weatherData.current.precipitation + (Math.random() - 0.5) * 5);
+            weatherData.current.pressure += (Math.random() - 0.5) * 2;
+
+            // Update pressure history
+            weatherData.historicalPressure.shift();
+            weatherData.historicalPressure.push(weatherData.current.pressure);
+
+            // Keep values in reasonable ranges
+            weatherData.current.temperature = Math.max(15, Math.min(40, weatherData.current.temperature));
+            weatherData.current.humidity = Math.max(40, Math.min(95, weatherData.current.humidity));
+            weatherData.current.windSpeed = Math.max(0, Math.min(50, weatherData.current.windSpeed));
+            weatherData.current.precipitation = Math.max(0, Math.min(50, weatherData.current.precipitation));
+            weatherData.current.pressure = Math.max(990, Math.min(1030, weatherData.current.pressure));
         }
 
         function simulateWeatherChanges() {
